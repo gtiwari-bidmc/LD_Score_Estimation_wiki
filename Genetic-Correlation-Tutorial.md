@@ -80,7 +80,7 @@ The `ldsc` `.sumstats` format requires five pieces of information for each SNP:
 4. Sample size (which often varies from SNP to SNP)
 5. A Z-score 
 
-In addition, because imputation quality is correlated with LD Score, we usually remove poorly-imputed SNPs by filtering on INFO > 0.9. The scz and bip summary statistics that we're using for this tutorial have INFO columns, so `munge_sumstats.py` will automatically perform the filtering. If you're using summary statistics that don't come with an INFO column, we recommend filtering to HapMap3 SNPs (using the `--merge` or `--merge-alleles` flags), because these seem to be well-imputed in most studies.
+Imputation quality is correlated with LD Score, and low imputation quality yields lower test statistics, so imputation quality is a confounder for LD Score regression. To prevent bias from variable imputation quality, we usually remove poorly-imputed SNPs by filtering on INFO > 0.9. The scz and bip summary statistics that we're using for this tutorial have INFO columns, so `munge_sumstats.py` will automatically perform the filtering. If you're using summary statistics that don't come with an INFO column, we recommend filtering to HapMap3 SNPs (using the `--merge` or `--merge-alleles` flags), because these seem to be well-imputed in most studies.
 
 The two sets of summary statistics that we're using for this tutorial don't have sample size columns, so we'll have to assume that sample size is the same for all SNPs and specify these sample sizes using the `--N` flag. The sample size for the scz study in question was 17115 and the sample size for the bip study was 11810. 
 
@@ -247,10 +247,10 @@ The next section shows the genetic correlation, Z-score and P-value. The genetic
 	P: 1.7478e-27
 
 
-The last section (which may not fit too well on your screen) is a table summarizing all results. This is particularly useful when running `--rg` with more than two traits. The columns are p1 = trait 1, p2 = trait 2, rg = genetic correlation, se = standard error of rg, p = p-value for rg; h2_obs = observed scale h2 for trait 2, h2_obs_se = standard error of observed scale h2 for trait 2, h2_int = single-trait LD Score regression intercept for trait 2, h2_int_se = single trait LD Score regression intercept standard error for trait 2, gcov_int = cross-trait LD Score regression intercept, gcov_int_se = cross-trait LD Score regression intercept standard error.
+The last section (which may not fit too well on your screen) is a table summarizing all results. This is particularly useful when running `--rg` with more than two traits. The columns are p1 = trait 1, p2 = trait 2, rg = genetic correlation, se = standard error of rg, p = p-value for rg; h2_obs, h2_obs_se = observed scale h2 for trait 2 and standard error, h2_int, h2_int_se = single-trait LD Score regression intercept for trait 2 and standard error,  gcov_int, gcov_int_se = cross-trait LD Score regression intercept and standard error.
 
 	Summary of Genetic Correlation Results
-		              p1               p2     rg     se          p  h2_obs h2_obs_se  h2_int  h2_int_se  gcov_int  gcov_int_se
+		              p1               p2     rg     se          p  h2_obs h2_obs_se  h2_int h2_int_se  gcov_int  gcov_int_se
 	 scz.sumstats.gz  bip.sumstats.gz  0.789  0.073  1.748e-27    0.36        NA   1.001      0.009     0.004        0.007
 
 	Analysis finished at Thu Jan 29 19:11:49 2015
