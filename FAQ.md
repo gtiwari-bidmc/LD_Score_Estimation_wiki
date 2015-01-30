@@ -1,7 +1,7 @@
 ##General
 
 
-**Q.** Is it cool if I fork / modify / etc LDSC?
+**Q.** Is it cool if I fork `ldsc`?
 
 **A.** Of course!
 
