@@ -53,7 +53,7 @@ Example:
 
 
 ## l2.M_5_50
-One line, # of columns = number of annotations in the accompanying `.l2.ldscore` file in the same order. Each column contains the number of SNPs in the corresponding annotation category with MAF > 5%. The `.l2.M` file format is the same, exe
+One line, # of columns = number of annotations in the accompanying `.l2.ldscore` file in the same order. Each column contains the number of SNPs in the corresponding annotation category with MAF > 5%. The `.l2.M` file format is the same, except without the restriction on MAF.
 
 Example: 
 
