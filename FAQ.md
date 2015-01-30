@@ -133,3 +133,7 @@ too many partitioned LD Scores. Try constraining the regression intercept.
 **Q.** I am estimating  r<sub>g</sub> between different studies of the same trait, and `ldsc` is not returning 1. What is wrong?
 
 **A.** Differences in ancestry between studies could push the  r<sub>g</sub> estimate down slighly.  r<sub>g</sub> between different definitions of the same phenotype might not be one (which could be an interesting result).  r<sub>g</sub> between a trait and a non-linear transformation of that trait (e.g., height and log(height) ) will generally not be 1.
+
+**Q.** How come `ldsc` is so fast even though you're estimating standard errors with a block jackknife? I thought jackknives were slow?
+
+**A.** It turns out that certain statistics (including WLS estimates) admit fast block jackknife algorithms. Instead of deleting a block of k SNPs and computing the WLS estimate using the remaining M-k SNPs (which requires around (M/k)*(M-k)*k = M(M-k) operations), we compute a statistic on the block of k SNPs (which requires around k operations), then aggregate these block-wise statistics to obtain the delete-a-block statistics. Code is clearer than words, so check out `ldscore.jackknife.py`.
