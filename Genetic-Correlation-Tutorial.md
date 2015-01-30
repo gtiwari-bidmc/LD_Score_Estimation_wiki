@@ -1,5 +1,3 @@
-#Genetic Correlation Tutorial
-
 ##Overview
 
 This tutorial will walk you through computing the genetic correlation between schizophrenia and bipolar disorder using `ldsc` and the summary statistics from the 2013 [PGC Cross-Disorder paper in the Lancet](http://www.ncbi.nlm.nih.gov/pubmed/23453885). 
