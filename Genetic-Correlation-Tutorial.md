@@ -18,8 +18,7 @@ If you want to compute the genetic correlation between schizophrenia and bipolar
 	$ mv pgc.cross.scz/pgc.cross.SCZ17.2013-05.txt .
 	$ python munge_sumstats.py --sumstats pgc.cross.SCZ17.2013-05.txt --N 17115 --out scz
 	$ python munge_sumstats.py --sumstats pgc.cross.BIP11.2013-05.txt --N 11810 --out bip
-	$ python ldsc.py --rg scz.sumstats.gz,bip.sumstats.gz --ref-ld-chr ld/ --w-ld-chr ld/ 
-		--out scz_bip
+	$ python ldsc.py --rg scz.sumstats.gz,bip.sumstats.gz --ref-ld-chr ld/ --w-ld-chr ld/ --out scz_bip
 
 
 ##LD Scores
@@ -156,8 +155,7 @@ The last section shows some basic metadata about the summary statistics. If mean
 
 Now that we have all the files that we need in the correct format, we can run LD Score regression with the following command:
 
-	$ python ldsc.py --rg scz.sumstats.gz,bip.sumstats.gz --ref-ld-chr ld/ --w-ld-chr ld/ 
-		--out scz_bip
+	$ python ldsc.py --rg scz.sumstats.gz,bip.sumstats.gz --ref-ld-chr ld/ --w-ld-chr ld/ --out scz_bip
 
 This will take about a minute, though the precise time will of course vary from machine to machine. Let's walk through the components of this command. 
 ###### `--rg`
@@ -266,8 +264,7 @@ There is no notion of observed or liability scale genetic correlation. We can co
 
 For heritability and genetic covariance, it is customary to report heritability on the liability scale, because liability scale heritability is comparable across studies with different prevalences. By default, `ldsc` outputs observed scale heritability. To convert to the liability scale, we need to tell `ldsc` the sample and population prevalence for each trait using the `--samp-prev` and `--pop-prev` flags, respectively. The population prevalence of scz and bip are both around 1%, and the sample prevalence in each of these studies was about 50%, so 
 
-	$ python ldsc.py --rg scz.sumstats.gz,bip.sumstats.gz --ref-ld-chr ld/ --w-ld-chr ld/ 
-		--out scz_bip --samp-prev 0.5,0.5 --pop-prev 0.01,0.01
+	$ python ldsc.py --rg scz.sumstats.gz,bip.sumstats.gz --ref-ld-chr ld/ --w-ld-chr ld/ --out scz_bip --samp-prev 0.5,0.5 --pop-prev 0.01,0.01
 
 The output is the same as before, except 'Observed' is replaced with 'Liability'.
 
