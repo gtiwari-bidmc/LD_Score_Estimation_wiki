@@ -11,6 +11,8 @@ You can estimate HapMap3 LD Scores for chromosome 22 using genotype data from th
 
 ## Estimating Univariate LD Scores
 
+This section of the tutorial requires downloading about 2MB of data.
+
 In order to estimate LD Scores, you need genotype data in the binary `plink` `.bed/.bim/.fam` format. We recommend using 1000 Genomes data from the appropriate continent, which can be downloaded from `$URL_GOES_HERE`. We recommend estimating LD Scores using a 1 centiMorgan (cM) window. Most `.bim` files have the cM column zeroed out. You can use the `plink 1.9` [`--cm-map`](https://www.cog-genomics.org/plink2/input#cm_map) flag along with your favorite genetic map (e.g., [here](https://mathgen.stats.ox.ac.uk/impute/1000GP%20Phase%203%20haplotypes%206%20October%202014.html)) to fill in the cM column of your `.bim` file. 
 
 For the purpose of this tutorial, you can download a `.bed/.bim/.fam` fileset with the cM column filled in from $URL_GOES_HERE. This fileset contains genotypes for all HapMap3 SNPs on chromosome 22 for 378 1000 Genomes Europeans. You can uncompress this fileset with the command
