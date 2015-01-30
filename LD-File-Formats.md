@@ -8,7 +8,7 @@ There are three main file formats:
 *NOTE* chromosomes are assumed to be integers. We haven't yet implemented LD Score regression for sex chromosomes
 
 
-## .annot
+## `.annot`
 
 For annotations. One row per SNP. Whitespace-delimited text, with header. `ldsc` supports compression either with `gzip` or `bzip2`. Column order matters. The columns are
 
@@ -27,7 +27,7 @@ Example:
 	1   2  rs2  0  1  0
 	1   3  rs3  0  0  1
 
-## .l2.ldscore 
+## `.l2.ldscore` 
 
 For LD Scores. This is the default output format of the `--l2` flag. One row per SNP. Whitespace-delimited text, with header. `ldsc` supports compression either with `gzip` or `bzip2`, with `gzip` as the default. Column order matters. The columns are
 
@@ -39,7 +39,7 @@ For LD Scores. This is the default output format of the `--l2` flag. One row per
 6. all additional columns -- LD Scores
 
 The CM column can be safely set to zero. Genetic positions are only used by the 
-`--ld-wind-cm flag`, which reads cM coordinates from the .bim file.
+`--ld-wind-cm` flag, which reads cM coordinates from the `.bim` file.
 
 Example:
 
@@ -52,7 +52,7 @@ Example:
 	22      rs143503259     16051453        0       0.0936  21.34
 
 
-## l2.M_5_50
+## `l2.M_5_50`
 One line, # of columns = number of annotations in the accompanying `.l2.ldscore` file in the same order. Each column contains the number of SNPs in the corresponding annotation category with MAF > 5%. The `.l2.M` file format is the same, except without the restriction on MAF.
 
 Example: 
