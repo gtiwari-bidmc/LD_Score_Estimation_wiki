@@ -1,1 +1,1 @@
-test
+Welcome to the `ldsc` wiki. This is the main repository for LD Score documentation. If you're just starting to use LD Score, the tutorials describe how to perform the basic analyses. The FAQ answers several common questions about `ldsc` output. 
