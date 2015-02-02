@@ -1,3 +1,5 @@
+Note: all GWAS datasets should be ancestry-matched. LD Score regression allows you to compute the genetic correlation between (say) two European GWAS or two Asian GWAS, but cannot deal with e.g., one European GWAS and one Asian GWAS, or two multi-continental meta-analyses. If you have multi-continental GWAS data, the right approach is to estimate genetic correlation for each continent separately then average the results.
+
 ## Required
 
 In order to generate a `.sumstats` file for estimating genetic correlation, the following data are required for each SNP
