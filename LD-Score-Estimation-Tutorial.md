@@ -122,7 +122,7 @@ These files tally the number of SNPs in the `.bed/.bim/.fam` fileset. The `.M` f
 	22	rs5994034	16894090	2.898
 	22	rs4010554	16894264	6.975
 
-The first four columns are CHR = chromosome, SNP = rs number, BP = base pair, CM = centiMorgan coordinate, MAF = minor allele frequency. `ldsc` uses rs numbers for merging LD Score files with summary statistics, so don't worry if the BP column refers to an old genome build. The BP column is only used for making sure that SNPs are sorted. If you use `ldsc` to estimate LD Scores, the SNPs will always be sorted. The last column (L2) is LD Scores. 
+The first three columns are CHR = chromosome, SNP = rs number, BP = base pair. `ldsc` uses rs numbers for merging LD Score files with summary statistics, so don't worry if the BP column refers to an old genome build. The BP column is only used for making sure that SNPs are sorted. If you use `ldsc` to estimate LD Scores, the SNPs will always be sorted. The last column (L2) is LD Scores.
 
 
 ## Partitioned LD Scores
