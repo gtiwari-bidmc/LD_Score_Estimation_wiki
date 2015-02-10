@@ -110,16 +110,17 @@ These files tally the number of SNPs in the `.bed/.bim/.fam` fileset. The `.M` f
 `ldsc` compresses `.l2.ldscore` files by default using `gzip`. You can view the contents of this file by typing
 
 	> gunzip -c 22.l2.ldscore.gz | head 
-	CHR	SNP	BP	CM	MAF	L2
-	22	rs9617528	16061016	0.059575804	0.2453825857519789	1.2713417184059392
-	22	rs4911642	16504399	2.1274577999999997	0.1741424802110818	1.8049604404920292
-	22	rs140378	16877135	2.2461841000000002	0.07519788918205805	3.8489099838024714
-	22	rs131560	16877230	2.2463345	0.06992084432717682	3.769076326853446
-	22	rs7287144	16886873	2.2521052000000004	0.29815303430079154	7.226373487745307
-	22	rs5748616	16888900	2.2531374	0.30606860158311344	7.37895060580649
-	22	rs5748662	16892858	2.2551908	0.2994722955145118	7.194666479349962
-	22	rs5994034	16894090	2.2558359	0.12005277044854878	2.898085094434722
-	22	rs4010554	16894264	2.2559285	0.316622691292876	6.975325669188992
+	
+	CHR SNP	        BP	        L2
+	22	rs9617528	16061016	1.271
+	22	rs4911642	16504399	1.805
+	22	rs140378	16877135	3.849
+	22	rs131560	16877230	3.769
+	22	rs7287144	16886873	7.226
+	22	rs5748616	16888900	7.379
+	22	rs5748662	16892858	7.195
+	22	rs5994034	16894090	2.898
+	22	rs4010554	16894264	6.975
 
 The first four columns are CHR = chromosome, SNP = rs number, BP = base pair, CM = centiMorgan coordinate, MAF = minor allele frequency. `ldsc` uses rs numbers for merging LD Score files with summary statistics, so don't worry if the BP column refers to an old genome build. The BP column is only used for making sure that SNPs are sorted. If you use `ldsc` to estimate LD Scores, the SNPs will always be sorted. The last column (L2) is LD Scores. 
 
