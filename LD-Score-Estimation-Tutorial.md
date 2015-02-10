@@ -1,35 +1,44 @@
 ## Overview
 
-This tutorial describes how to use `ldsc` to estimate LD Scores from `plink` format `.bed/.bim/.fam` filesets. The tutorial is divided into two components. The first component describes how to estimate non-partitioned LD Scores. If you are interested in genetic correlation or the LD Score regression intercept, you only need to read the first component. The second component describes how to estimate partitioned LD Scores and how to use the full baseline model from [Finucane, Bulik-Sullivan et al., 2015](http://biorxiv.org/content/early/2015/01/23/014241.full-text.pdf). The second component is somewhat more complicated
+This tutorial describes how to use `ldsc` to estimate LD Scores from [`plink`](https://www.cog-genomics.org/plink2/) format `.bed/.bim/.fam` filesets. 
+If you are interested in estimating genetic correlation or the LD Score regression intercept from European-ancestry GWAS data, you can download suitable pre-computed LD Scores from [this URL](http://www.broadinstitute.org/~bulik/eur_ldscores/); there is no need to compute your own LD Scores.
+
+The tutorial is divided into two components. The first component describes how to estimate non-partitioned LD Scores. The second component describes how to estimate partitioned LD Scores and how to use the full baseline model from [Finucane, Bulik-Sullivan et al., 2015](http://biorxiv.org/content/early/2015/01/23/014241.full-text.pdf). The second component is somewhat more complicated.
 
 ## TL;DR
-You can estimate HapMap3 LD Scores for chromosome 22 using genotype data from the 1000 Genomes Europeans by entering the following commands
 
-	$ wget $URL_GOES_HERE
-	$ tar xvf $FILENAME_GOES_HERE
-	$ python ldsc.py --bfile 22 --l2 --ld-wind-cm 1 --out 22
+You can estimate HapMap3 LD Scores for chromosome 22 using genotype data from the 1000 Genomes Europeans by entering the following commands:
 
-## Estimating Univariate LD Scores
+	> wget www.broadinstitute.org/~bulik/1kg_eur.tar.bz2
+	> tar -jxvf 1kg_eur.tar.bz2
+	> python ldsc.py --bfile 22 --l2 --ld-wind-cm 1 --out 22
+
+## Univariate LD Scores
 
 This section of the tutorial requires downloading about 2MB of data.
 
-In order to estimate LD Scores, you need genotype data in the binary `plink` `.bed/.bim/.fam` format. We recommend using 1000 Genomes data from the appropriate continent, which can be downloaded from `$URL_GOES_HERE`. We recommend estimating LD Scores using a 1 centiMorgan (cM) window. Most `.bim` files have the cM column zeroed out. You can use the `plink 1.9` [`--cm-map`](https://www.cog-genomics.org/plink2/input#cm_map) flag along with your favorite genetic map (e.g., [here](https://mathgen.stats.ox.ac.uk/impute/1000GP%20Phase%203%20haplotypes%206%20October%202014.html)) to fill in the cM column of your `.bim` file. 
+In order to estimate LD Scores, you need genotype data in the binary `plink` `.bed/.bim/.fam` format. We recommend using 1000 Genomes data from the appropriate continent, which can be downloaded in `vcf` format from the [1000 Genomes FTP site](ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/) and converted to `plink` format using the [`plink --vcf`](https://www.cog-genomics.org/plink2/input#vcf) command. 
 
-For the purpose of this tutorial, you can download a `.bed/.bim/.fam` fileset with the cM column filled in from $URL_GOES_HERE. This fileset contains genotypes for all HapMap3 SNPs on chromosome 22 for 378 1000 Genomes Europeans. You can uncompress this fileset with the command
+We recommend estimating LD Scores using a 1 centiMorgan (cM) window. Most `.bim` files have the cM column zeroed out, because `plink` doesn't actually use cM coordinates for anything. You can use the `plink --cm-map`](https://www.cog-genomics.org/plink2/input#cm_map) flag along with your favorite genetic map (e.g., [here](https://mathgen.stats.ox.ac.uk/impute/1000GP%20Phase%203%20haplotypes%206%20October%202014.html)) to fill in the cM column of your `.bim` file. 
 
-	$ tar xvf $FILENAME_GOES_HERE
+For the purpose of this tutorial, you can download a `.bed/.bim/.fam` fileset with the cM column filled in [here](http://www.broadinstitute.org/~bulik/1kg_eur.tar.bz2). This fileset contains genotypes for all HapMap3 SNPs on chromosome 22 for 378 1000 Genomes Europeans. You can uncompress this fileset with the command
 
-which should yield three files
+	> tar -jxvf 1kg_eur.tar.bz2
+
+This will produce a directory called `1kg_eur` with four files 
 	
 	22.bim
 	22.fam
 	22.bed
+	22.hm3.daf.gz
+
+The first three files are the `.bed/.bim/.fam` fileset; the third file contains derived allele frequencies (DAFs) for all SNPs in the `.bim` file, for use with the `ldsc --cts-bin` flag later in the tutorial.
 
 You can estimate LD Scores with the command
 
 	python ldsc.py --bfile --l2 --ld-wind-cm 1 --out 22
 
-This should take roughly 2-10 seconds to run. The `--bfile` flag points to the `plink` format fileset; the syntax is exactly the same as `plink`. The `--l2` flag tells `ldsc` to compute LD Scores. The `--ld-wind-cm` flag tells `lsdc` to use a 1 cM window to estimate LD Scores. The other options are `--ld-wind-kb`, which defines the window size in kilobases, and `--ld-wind-snp`, which defines the window size in terms of a number of SNPs. We recommend using `--ld-wind-cm`, because this allows the window size to vary with the range of LD. It is sensible to use a larger window (as measured in kb) in regions like the MHC where LD spans over tens of megabases than in regions with high recombination rate, where LD doesn't extend beyond ~100kb.
+This should take around 10 seconds to run. The `--bfile` flag points to the `plink` format fileset; the syntax is exactly the same as `plink`. The `--l2` flag tells `ldsc` to compute LD Scores. The `--ld-wind-cm` flag tells `lsdc` to use a 1 cM window to estimate LD Scores. The other options are `--ld-wind-kb`, which defines the window size in kilobases, and `--ld-wind-snp`, which defines the window size in terms of a number of SNPs. We recommend using `--ld-wind-cm`, because this allows the window size to vary with the range of LD. It is sensible to use a larger window (as measured in kb) in regions like the MHC where LD spans over tens of megabases than in regions with high recombination rate, where LD doesn't extend beyond ~100kb.
 
 This command will produce four files:
 	
@@ -100,7 +109,7 @@ These files tally the number of SNPs in the `.bed/.bim/.fam` fileset. The `.M` f
 
 `ldsc` compresses `.l2.ldscore` files by default using `gzip`. You can view the contents of this file by typing
 
-	$ gunzip -c 22.l2.ldscore.gz | head 
+	> gunzip -c 22.l2.ldscore.gz | head 
 	CHR	SNP	BP	CM	MAF	L2
 	22	rs9617528	16061016	0.059575804	0.2453825857519789	1.2713417184059392
 	22	rs4911642	16504399	2.1274577999999997	0.1741424802110818	1.8049604404920292
@@ -115,6 +124,6 @@ These files tally the number of SNPs in the `.bed/.bim/.fam` fileset. The `.M` f
 The first four columns are CHR = chromosome, SNP = rs number, BP = base pair, CM = centiMorgan coordinate, MAF = minor allele frequency. `ldsc` uses rs numbers for merging LD Score files with summary statistics, so don't worry if the BP column refers to an old genome build. The BP column is only used for making sure that SNPs are sorted. If you use `ldsc` to estimate LD Scores, the SNPs will always be sorted. The last column (L2) is LD Scores. 
 
 
-## Estimating Partitioned LD Scores
+## Partitioned LD Scores
 
 ## Building on top of the Finucane et al., Baseline Model
