@@ -19,7 +19,7 @@ This section of the tutorial requires downloading about 2MB of data.
 
 In order to estimate LD Scores, you need genotype data in the binary `plink` `.bed/.bim/.fam` format. We recommend using 1000 Genomes data from the appropriate continent, which can be downloaded in `vcf` format from the [1000 Genomes FTP site](ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/) and converted to `plink` format using the [`plink --vcf`](https://www.cog-genomics.org/plink2/input#vcf) command. 
 
-We recommend estimating LD Scores using a 1 centiMorgan (cM) window. Most `.bim` files have the cM column zeroed out, because `plink` doesn't actually use cM coordinates for anything. You can use the `plink --cm-map`](https://www.cog-genomics.org/plink2/input#cm_map) flag along with your favorite genetic map (e.g., [here](https://mathgen.stats.ox.ac.uk/impute/1000GP%20Phase%203%20haplotypes%206%20October%202014.html)) to fill in the cM column of your `.bim` file. 
+We recommend estimating LD Scores using a 1 centiMorgan (cM) window. Most `.bim` files have the cM column zeroed out, because `plink` doesn't actually use cM coordinates for anything. You can use the [`plink --cm-map`](https://www.cog-genomics.org/plink2/input#cm_map) flag along with your favorite genetic map (e.g., [here](https://mathgen.stats.ox.ac.uk/impute/1000GP%20Phase%203%20haplotypes%206%20October%202014.html)) to fill in the cM column of your `.bim` file. 
 
 For the purpose of this tutorial, you can download a `.bed/.bim/.fam` fileset with the cM column filled in [here](http://www.broadinstitute.org/~bulik/1kg_eur.tar.bz2). This fileset contains genotypes for all HapMap3 SNPs on chromosome 22 for 378 1000 Genomes Europeans. You can uncompress this fileset with the command
 
