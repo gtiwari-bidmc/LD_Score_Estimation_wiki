@@ -1,6 +1,6 @@
 ##Overview
 
-This tutorial will walk you through computing the genetic correlation between schizophrenia and bipolar disorder using `ldsc` and the summary statistics from the 2013 [PGC Cross-Disorder paper in the Lancet](http://www.ncbi.nlm.nih.gov/pubmed/23453885). 
+This tutorial will walk you through computing the genetic correlation between schizophrenia and bipolar disorder using `ldsc` and the summary statistics from the 2013 [PGC Cross-Disorder paper in the Lancet](http://www.ncbi.nlm.nih.gov/pubmed/23453885). This tutorial assumes that you have already downloaded and installed `python` and `ldsc`. If you have not already done this, see the instructions in the [README](https://github.com/bulik/ldsc).
 
 This tutorial requires downloading about 75 MB of data.
 
@@ -8,22 +8,33 @@ This tutorial requires downloading about 75 MB of data.
 
 If you want to compute the genetic correlation between schizophrenia and bipolar disorder, type these commands
 
-	$ wget www.med.unc.edu/pgc/files/resultfiles/pgc.cross.bip.zip
-	$ wget www.med.unc.edu/pgc/files/resultfiles/pgc.cross.scz.zip
-	$ unzip pgc.cross.bip.zip
-	$ unzip pgc.cross.scz.zip
-	$ mv pgc.cross.bip/pgc.cross.BIP11.2013-05.txt .
-	$ mv pgc.cross.scz/pgc.cross.SCZ17.2013-05.txt .
-	$ python munge_sumstats.py --sumstats pgc.cross.SCZ17.2013-05.txt --N 17115 --out scz
-	$ python munge_sumstats.py --sumstats pgc.cross.BIP11.2013-05.txt --N 11810 --out bip
-	$ python ldsc.py --rg scz.sumstats.gz,bip.sumstats.gz --ref-ld-chr ld/ --w-ld-chr ld/ --out scz_bip
+	# Download Data
+	> wget www.med.unc.edu/pgc/files/resultfiles/pgc.cross.bip.zip
+	> wget www.med.unc.edu/pgc/files/resultfiles/pgc.cross.scz.zip
+	> wget http://www.broadinstitute.org/~bulik/eur_ldscores/eur_w_ld_chr.tar.bz2
+
+	# Munge Data
+	> tar -jxvf eur_w_ld_chr.tar.bz2
+	> unzip -o pgc.cross.bip.zip
+	> unzip -o pgc.cross.scz.zip
+	> python munge_sumstats.py --sumstats pgc.cross.SCZ17.2013-05.txt --N 17115 --out scz
+	> python munge_sumstats.py --sumstats pgc.cross.BIP11.2013-05.txt --N 11810 --out bip
+
+	# LD Score Regression
+	> python ldsc.py --rg scz.sumstats.gz,bip.sumstats.gz --ref-ld-chr eur_ref_ld_chr/ --w-ld-chr eur_w_ld_chr/ --out scz_bip
+	> less scz_bip.log
 
 
 ##LD Scores
 
-This tutorial assumes that you have already computed the LD Scores that you want to use for LD Score regression. If you just want to estimate genetic correlation in European GWAS, there is probably no need for you to compute your own LD Scores, so you can skip the tutorial on LD Score estimation and download pre-computed LD Scores from URL_GOES_HERE. These LD Scores were computed using 1000 Genomes European data and are appropriate for use with European GWAS data. For GWAS from other populations, you will need to compute population-appropriate LD Scores. 
+If you just want to estimate genetic correlation in European GWAS, there is probably no need for you to compute your own LD Scores, so you can skip the tutorial on LD Score estimation and download pre-computed LD Scores with the following commands:
+	
+	> wget http://www.broadinstitute.org/~bulik/eur_ldscores/eur_w_ld_chr.tar.bz2
+	> tar -jxvf eur_w_ld_chr.tar.bz2
 
-For the purpose of this tutorial, we assume that you have placed the LD Score files into a director called `ld/`, containing files `*.l2.M_5_50`, `*.l2.ldscore.bz2`.
+This will create two a new directories in your current working directory named `eur_ref_ld_chr`. If your machine does not have the `wget` utility, you can go to (this URL)[http://www.broadinstitute.org/~bulik/eur_ldscores/] and click the LD Score download links.
+
+These LD Scores were computed using 1000 Genomes European data and are appropriate for use with European GWAS data, including the two psychiatric datasets used in this tutorial. For GWAS from other populations, you will need to compute population-appropriate LD Scores. For descriptions of the LD Score files you have just downloaded, see either the (LD Score file formats)[https://github.com/bulik/ldsc/wiki/LD-File-Formats] or (LD Score estimation)[https://github.com/bulik/ldsc/wiki/LD-Score-Estimation-Tutorial] pages. In general, you will want to have separate sets of LD Scores for the `--w-ld-chr` and `--ref-ld-chr` flags. For this tutorial, we are using the same set of LD Scores for both in order to reduce the amount of data that it is necessary to download, and because this more closely mimics the analyses in the [PGC Cross-Disorder Nature Genetics paper](http://www.ncbi.nlm.nih.gov/pubmed/23933821) (paywalled, unfortunately), which use `GCTA` with a GRM constructed using only genotpyed SNPs.
 
 ##Downloading Summary Statistics
 
@@ -97,13 +108,13 @@ I'll describe the contents of the log file section-by-section.
 
 The first section is just the `ldsc` masthead:
 
-	\**********************************************************************
+	**********************************************************************
 	* LD Score Regression (LDSC)
 	* Version 1.0.0
 	* (C) 2014-2015 Brendan Bulik-Sullivan and Hilary Finucane
 	* Broad Institute of MIT and Harvard / MIT Department of Mathematics
 	* GNU General Public License v3
-	\**********************************************************************
+	**********************************************************************
 
 The next section tells you what command line options you entered. This section is useful for when you're looking at old log files, wondering precisely how some data were processed.
 
@@ -153,13 +164,13 @@ The last section shows some basic metadata about the summary statistics. If mean
 
 Now that we have all the files that we need in the correct format, we can run LD Score regression with the following command:
 
-	$ python ldsc.py --rg scz.sumstats.gz,bip.sumstats.gz --ref-ld-chr ld/ --w-ld-chr ld/ --out scz_bip
+	$ python ldsc.py --rg scz.sumstats.gz,bip.sumstats.gz --ref-ld-chr eur_w_ld_chr/ --w-ld-chr eur_w_ld_chr/ --out scz_bip
 
 This will take about a minute, though the precise time will of course vary from machine to machine. Let's walk through the components of this command. 
 ###### `--rg`
 The `--rg` flag tells `ldsc` to compute genetic correlation. The argument to `--rg` should be a comma-separated list of files in the `.sumstats` format. In this case, we have only passed two files to `--rg`, but if we were to pass three or more files, `ldsc.py` would compute the genetic correlation between the first file and the list and all subsequent files (i.e., --rg a,b,c will compute rg(a,b) and rg(a,c) ). 
 ###### `--ref-ld-chr`
-The `--ref-ld` flag tells `ldsc` which LD Score files to use as the independent variable in the LD Score regression. The `--ref-ld-chr` flag is used for LD Score files split across chromosomes. By default, `ldsc` appends the chromosome number to the end. For example, typing `--ref-ld-chr ld/` tells `ldsc` to use the files `ld/1.l2.ldscore, ... , ld/22.l2.ldscore`. If the chromosome number is in the middle of the filename, you can tell `ldsc` where to insert the chromosome number by using an `@` symbol. For example, `--ref-ld-chr ld/chr@`.  The argument to `--ref-ld` should omit the `.l2.ldscore` or `.l2.ldscore.gz` file suffix.
+The `--ref-ld` flag tells `ldsc` which LD Score files to use as the independent variable in the LD Score regression. The `--ref-ld-chr` flag is used for LD Score files split across chromosomes. By default, `ldsc` appends the chromosome number to the end. For example, typing `--ref-ld-chr eur_ref_ld_chr/` tells `ldsc` to use the files `eur_w_ld_chr/1.l2.ldscore, ... , eur_w_ld_chr/22.l2.ldscore`. If the chromosome number is in the middle of the filename, you can tell `ldsc` where to insert the chromosome number by using an `@` symbol. For example, `--ref-ld-chr ld/chr@`.  The argument to `--ref-ld` should omit the `.l2.ldscore` or `.l2.ldscore.gz` file suffix.
 ###### `--w-ld-chr`
 The `--w-ld` flag tells `ldsc` which LD Scores to use for the regression weights. Ideally, the `--w-ld` LD Score for SNP j should be the sum over all SNPs k included in the regression of r^2_jk. However, for this tutorial, we are using the same set of LD Scores for `--w-ld` and `--ref-ld`. In practice, LD Score regression is not very sensitive to the precise choice of LD Scores used for the `--w-ld` flag. For example, if you want to compute genetic correlation between scz and bip with 850,000 regression SNPs and genetic correlation between scz and major depression with (say) 840,000 regression SNPs, almost all of which are overlapping, then you should save time and use the same `--w-ld-chr` LD Scores for both regressions.
 
@@ -247,7 +258,7 @@ The next section shows the genetic correlation, Z-score and P-value. The genetic
 	P: 1.7478e-27
 
 
-The last section (which may not fit too well on your screen) is a table summarizing all results. This is particularly useful when running `--rg` with more than two traits. The columns are p1 = trait 1, p2 = trait 2, rg = genetic correlation, se = standard error of rg, p = p-value for rg; h2_obs, h2_obs_se = observed scale h2 for trait 2 and standard error, h2_int, h2_int_se = single-trait LD Score regression intercept for trait 2 and standard error,  gcov_int, gcov_int_se = cross-trait LD Score regression intercept and standard error.
+The last section (which may not fit too well on your screen) is a table summarizing all results. This feature is a little silly when computing a single genetic correlation, but is a big time-saver when running `--rg` with more than two traits. The columns are p1 = trait 1, p2 = trait 2, rg = genetic correlation, se = standard error of rg, p = p-value for rg; h2_obs, h2_obs_se = observed scale h2 for trait 2 and standard error, h2_int, h2_int_se = single-trait LD Score regression intercept for trait 2 and standard error,  gcov_int, gcov_int_se = cross-trait LD Score regression intercept and standard error.
 
 	Summary of Genetic Correlation Results
 		              p1               p2     rg     se          p  h2_obs h2_obs_se  h2_int h2_int_se  gcov_int  gcov_int_se
@@ -255,15 +266,23 @@ The last section (which may not fit too well on your screen) is a table summariz
 
 	Analysis finished at Thu Jan 29 19:11:49 2015
 	Total time elapsed: 28.0s
-	
+
 ## Conversion to Liability Scale
 
 There is no notion of observed or liability scale genetic correlation. We can compute genetic correlation between pairs of quantitative traits, one quantitative trait and one binary trait, and pairs of binary traits without having to worry about different scales. In addition, if we compute genetic correlations from two studies of the same binary trait with different sample prevalences, we should expect to get the same result, modulo noise.
 
 For heritability and genetic covariance, it is customary to report heritability on the liability scale, because liability scale heritability is comparable across studies with different prevalences. By default, `ldsc` outputs observed scale heritability. To convert to the liability scale, we need to tell `ldsc` the sample and population prevalence for each trait using the `--samp-prev` and `--pop-prev` flags, respectively. The population prevalence of scz and bip are both around 1%, and the sample prevalence in each of these studies was about 50%, so 
 
-	$ python ldsc.py --rg scz.sumstats.gz,bip.sumstats.gz --ref-ld-chr ld/ --w-ld-chr ld/ --out scz_bip --samp-prev 0.5,0.5 --pop-prev 0.01,0.01
+	$ python ldsc.py --rg scz.sumstats.gz,bip.sumstats.gz --ref-ld-chr eur_w_ld_chr/ --w-ld-chr eur_w_ld_chr/ --out scz_bip --samp-prev 0.5,0.5 --pop-prev 0.01,0.01
 
-The output is the same as before, except 'Observed' is replaced with 'Liability'.
+The output is the same as before, except 'Observed' is replaced with 'Liability', and the numbers are reported on the liability scale. For example, here is the estimate of the liabilty scale SNP-heritability of schizophrenia:
+
+	Heritability of phenotype 1
+	---------------------------
+	Total Liability scale h2: 0.3261 (0.0267)
+	Lambda GC: 1.2038
+	Mean Chi^2: 1.2336
+	Intercept: 1.0013 (0.0112)
+	Ratio: 0.0057 (0.0481)
 
 If you're computing genetic covariance between one binary trait and one quantitative trait, then you can tell `ldsc` that (say) the second trait is a quantitative trait via `--samp-prev 0.5,nan --pop-prev 0.01,nan`.
