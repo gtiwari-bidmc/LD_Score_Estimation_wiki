@@ -238,7 +238,7 @@ The next two sections show the heritabilities of each trait from single-trait LD
 	Intercept: 1.0013 (0.0093)
 	Ratio: 0.0092 (0.065)
 
-The next section shows the genetic covariance. Genetic covariance will be biased downwards by GC correction. The intercept is shown on the same scale as the single-trait LD Score regression intercept. Multiply by sqrt(N<sub>1</sub>N<sub>2</sub>( in order to obtain an intercept on the N<sub>s</sub>*gencov scale. 
+The next section shows the genetic covariance. Genetic covariance will be biased downwards by GC correction. The intercept is shown on the same scale as the single-trait LD Score regression intercept. Multiply by sqrt(N<sub>1</sub>N<sub>2</sub>) in order to obtain an intercept on the N<sub>s</sub>*gencov scale. The data we are using have no sample overlap, so the intercept is less than one standard error away from zero.
 
 	Genetic Covariance
 	------------------
