@@ -13,7 +13,7 @@ You can estimate HapMap3 LD Scores for chromosome 22 using genotype data from th
 	> tar -jxvf 1kg_eur.tar.bz2
 	> python ldsc.py --bfile 22 --l2 --ld-wind-cm 1 --out 22
 
-## Univariate LD Scores
+## Univariate LD Scores 
 
 This section of the tutorial requires downloading about 2MB of data.
 
@@ -124,6 +124,11 @@ These files tally the number of SNPs in the `.bed/.bim/.fam` fileset. The `.M` f
 
 The first three columns are CHR = chromosome, SNP = rs number, BP = base pair. `ldsc` uses rs numbers for merging LD Score files with summary statistics, so don't worry if the BP column refers to an old genome build. The BP column is only used for making sure that SNPs are sorted. If you use `ldsc` to estimate LD Scores, the SNPs will always be sorted. The last column (L2) is LD Scores.
 
+## `--w-ld` 
+
+The LD Scores to use as the argument for the `--w-ld` and `--w-ld-chr` flags should be computed as sum r<sup>2</sup> over SNPs in the regression, i.e., the SNPs for which you have Z-scores. If you have a list of regression SNPs in a file called `regression.snplist`, formatted as one rs number per line, no header, then you can compute the appropriate `--w-ld` LD Scores with the `--extract regression.snplist` flag (this is the same syntax for restricting to a subset of SNPs as in `plink`). 
+
+The `--w-ld` LD Scores are just used for weighting the regression and generally do not have a huge impact on the results. If you are using LD Score regression with a large number of traits have Z-scores for slightly different sets of SNPs for each trait, then we recommend using the same `--w-ld` LD Scores for each trait in order to save time.
 
 ## Partitioned LD Scores
 
