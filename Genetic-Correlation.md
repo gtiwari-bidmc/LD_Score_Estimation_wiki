@@ -330,4 +330,4 @@ In this case, there is no sample overlap, so we can use the command `--constrain
 	              p1               p2     rg     se       z          p  h2_obs  h2_obs_se  h2_int h2_int_se  gcov_int gcov_int_se
 	 scz.sumstats.gz  bip.sumstats.gz  0.674  0.039  17.099  1.514e-65   0.528      0.036       1        NA         0          NA
 	
-The output format is essentially the same. Note that the standard error of the genetic correlation estimate has been reduced by about 35% from 0.0604 to 0.0394. This appears to be typical. 
+The output format is essentially the same. Note that the standard error of the genetic correlation estimate has been reduced by about 35% from 0.0604 to 0.0394. This amount of improvement appears to be typical. 
