@@ -21,7 +21,7 @@ If you want to compute the genetic correlation between schizophrenia and bipolar
 	> python munge_sumstats.py --sumstats pgc.cross.BIP11.2013-05.txt --N 11810 --out bip
 
 	# LD Score Regression
-	> python ldsc.py --rg scz.sumstats.gz,bip.sumstats.gz --ref-ld-chr eur_ref_ld_chr/ --w-ld-chr eur_w_ld_chr/ --out scz_bip
+	> python ldsc.py --rg scz.sumstats.gz,bip.sumstats.gz --ref-ld-chr eur_w_ld_chr/ --w-ld-chr eur_w_ld_chr/ --out scz_bip
 	> less scz_bip.log
 
 
@@ -225,44 +225,43 @@ The next two sections show the heritabilities of each trait from single-trait LD
 	Heritability of phenotype 1
 	---------------------------
 	Total Observed scale h2: 0.5909 (0.0484)
-	Lambda GC: 1.2054
+	Lambda GC: 1.2038
 	Mean Chi^2: 1.2336
 	Intercept: 1.0013 (0.0112)
 	Ratio: 0.0057 (0.0481)
 
 	Heritability of phenotype 2/2
 	-----------------------------
-	Total Observed scale h2: 0.3604 (0.0367)
-	Lambda GC: 1.1382
+	Total Observed scale h2: 0.5223 (0.0532)
+	Lambda GC: 1.1396
 	Mean Chi^2: 1.1437
 	Intercept: 1.0013 (0.0093)
 	Ratio: 0.0092 (0.065)
-
+	
 The next section shows the genetic covariance. Genetic covariance will be biased downwards by GC correction. The intercept is shown on the same scale as the single-trait LD Score regression intercept. Multiply by sqrt(N<sub>1</sub>N<sub>2</sub>) in order to obtain an intercept on the N<sub>s</sub>*gencov scale. The data we are using have no sample overlap, so the intercept is less than one standard error away from zero.
 
 	Genetic Covariance
 	------------------
-	Total Observed scale gencov: 0.3639 (0.037)
+	Total Observed scale gencov: 0.3643 (0.0368)
 	Mean z1*z2: 0.1226
-	Intercept: 0.0038 (0.0072)
+	Intercept: 0.0037 (0.0071)
 
 The next section shows the genetic correlation, Z-score and P-value. The genetic correlation estimate is not biased by GC correction.
 
+	
 	Genetic Correlation
 	-------------------
-	Genetic Correlation: 0.7885 (0.0726)
-	Z-score: 10.8621
-	P: 1.7478e-27
+
+	Genetic Correlation: 0.6558 (0.0604)
+	Z-score: 10.8518
+	P: 1.9549e-27
 
 
 The last section (which may not fit too well on your screen) is a table summarizing all results. This feature is a little silly when computing a single genetic correlation, but is a big time-saver when running `--rg` with more than two traits. The columns are p1 = trait 1, p2 = trait 2, rg = genetic correlation, se = standard error of rg, p = p-value for rg; h2_obs, h2_obs_se = observed scale h2 for trait 2 and standard error, h2_int, h2_int_se = single-trait LD Score regression intercept for trait 2 and standard error,  gcov_int, gcov_int_se = cross-trait LD Score regression intercept and standard error.
 
 	Summary of Genetic Correlation Results
-		              p1               p2     rg     se          p  h2_obs h2_obs_se  h2_int h2_int_se  gcov_int  gcov_int_se
-	 scz.sumstats.gz  bip.sumstats.gz  0.789  0.073  1.748e-27    0.36        NA   1.001      0.009     0.004        0.007
-
-	Analysis finished at Thu Jan 29 19:11:49 2015
-	Total time elapsed: 28.0s
+	              p1               p2     rg    se       z          p  h2_obs  h2_obs_se  h2_int  h2_int_se  gcov_int  gcov_int_se
+	 scz.sumstats.gz  bip.sumstats.gz  0.656  0.06  10.852  1.955e-27   0.522      0.053   1.001      0.009     0.004        0.007
 
 ## Conversion to Liability Scale
 
@@ -284,3 +283,51 @@ The output is the same as before, except 'Observed' is replaced with 'Liability'
 
 If you're computing genetic covariance between one binary trait and one quantitative trait, then you can tell `ldsc` that (say) the second trait is a quantitative trait via `--samp-prev 0.5,nan --pop-prev 0.01,nan`.
 
+## Constraining the Intercept
+
+When estimating heritability, the LD Score regression intercept protects from bias from population stratification and cryptic relatedness. When estimating genetic correlation, the LD Score regression intercept protects against bias shared population stratification and sample overlap. However, constraining the intercept can reduce the standard error substantially. If you think that 
+
+1. The amount of error from population stratification is less than error from sampling noise (usually the case for not-so stratified GWAS with PC covariates)
+2. You know how much sample overlap there is (even if there is complete sample overlap!),
+
+then you will probably win on mean square error by constraining the intercept.
+However, you should be careful with constraining the intercept. If you constrain the cross-trait LD Score regression intercept to zero when there is sample overlap, you can get completely misleading results that will frequently be out-of-bounds (e.g., r<sub>g</sub> >> 1).
+
+You can constrain the intercept with the `--constrain-intercept` flag. For h<sup>2</sup> estimation, the synxtax is `--constrain-intercept N`, where N is the desired intercept (usually 1, though sometimes lower if there is GC correction). For r<sub>g</sub>, the syntax is `--constrain-intercept N1,N2,N3`, where N1 is the intercept for the first single-trait LD Score regression, N2 is the intercept for the second single-trait LD Score regression and N3 is the intercept for the cross-trait LD Score regression. If there is sample overlap, the correct value of N3 requires some care to compute; a formula can be found in the supplementary note of the [genetic correlation paper](http://www.biorxiv.org/content/early/2015/01/27/014498). 
+
+In this case, there is no sample overlap, so we can use the command `--constrain-intercept 1,1,0`, or the shortcut `--no-intercept`, which is just syntactic sugar for `--constrain-intercept 1,1,0`. This yields
+
+	$ python ldsc.py --rg scz.sumstats.gz,bip.sumstats.gz --ref-ld-chr eur_w_ld_chr/ --w-ld-chr eur_w_ld_chr/ --out scz_bip --no-intercept
+	
+	Heritability of phenotype 1
+	---------------------------
+	Total Observed scale h2: 0.5948 (0.0299)
+	Lambda GC: 1.2038
+	Mean Chi^2: 1.2336
+	Intercept: constrained to 1
+
+	Heritability of phenotype 2/2
+	-----------------------------
+	Total Observed scale h2: 0.5277 (0.036)
+	Lambda GC: 1.1396
+	Mean Chi^2: 1.1437
+	Intercept: constrained to 1
+	
+	Genetic Covariance
+	------------------
+	Total Observed scale gencov: 0.3774 (0.0238)
+	Mean z1*z2: 0.1226
+	Intercept: constrained to 0
+	
+	Genetic Correlation
+	-------------------
+	Genetic Correlation: 0.6736 (0.0394)
+	Z-score: 17.0988
+	P: 1.5143e-65
+
+
+	Summary of Genetic Correlation Results
+	              p1               p2     rg     se       z          p  h2_obs  h2_obs_se  h2_int h2_int_se  gcov_int gcov_int_se
+	 scz.sumstats.gz  bip.sumstats.gz  0.674  0.039  17.099  1.514e-65   0.528      0.036       1        NA         0          NA
+	
+The output format is essentially the same. Note that the standard error of the genetic correlation estimate has been reduced by about 35% from 0.0604 to 0.0394. This appears to be typical. 
