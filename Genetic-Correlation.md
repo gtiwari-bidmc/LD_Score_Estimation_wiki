@@ -12,13 +12,16 @@ If you want to compute the genetic correlation between schizophrenia and bipolar
 	> wget www.med.unc.edu/pgc/files/resultfiles/pgc.cross.bip.zip
 	> wget www.med.unc.edu/pgc/files/resultfiles/pgc.cross.scz.zip
 	> wget www.broadinstitute.org/~bulik/eur_ldscores/eur_w_ld_chr.tar.bz2
+	> wget www.broadinstitute.org/~bulik/w_hm3.snplist.bz2
+
 
 	# Munge Data
 	> tar -jxvf eur_w_ld_chr.tar.bz2
 	> unzip -o pgc.cross.bip.zip
 	> unzip -o pgc.cross.scz.zip
-	> python munge_sumstats.py --sumstats pgc.cross.SCZ17.2013-05.txt --N 17115 --out scz
-	> python munge_sumstats.py --sumstats pgc.cross.BIP11.2013-05.txt --N 11810 --out bip
+	> bunzip2 w_hm3.snplist.bz2
+	> python munge_sumstats.py --sumstats pgc.cross.SCZ17.2013-05.txt --N 17115 --out scz -merge-alleles w_hm3.snplist
+	> python munge_sumstats.py --sumstats pgc.cross.BIP11.2013-05.txt --N 11810 --out bip --merge-alleles w_hm3.snplist
 
 	# LD Score Regression
 	> python ldsc.py --rg scz.sumstats.gz,bip.sumstats.gz --ref-ld-chr eur_w_ld_chr/ --w-ld-chr eur_w_ld_chr/ --out scz_bip
@@ -92,10 +95,15 @@ Imputation quality is correlated with LD Score, and low imputation quality yield
 
 The two sets of summary statistics that we're using for this tutorial don't have sample size columns, so we'll have to assume that sample size is the same for all SNPs and specify these sample sizes using the `--N` flag. The sample size for the scz study in question was 17115 and the sample size for the bip study was 11810. 
 
+It is a good idea to check that the alleles listed in your summary statistics files match the alleles listed in the data used to estimate LD Scores. Sometimes a small number of alleles won't match; this usually indicates mis-labeled SNPs. This is accomplished using the `--merge-alleles` flag which takes as its argument a file with a list of SNPs and alleles. You can download the required alleles file with the following command (or by manually following the download link if your machine does not have the `wget` utility):
+
+	> wget http://www.broadinstitute.org/~bulik/w_hm3.snplist.bz2
+	> bunzip2 w_hm3.snplist.bz2
+
 To convert the summary statistics, type the commands
 
-	> python munge_sumstats.py --sumstats pgc.cross.SCZ17.2013-05.txt --N 17115 --out scz
-	> python munge_sumstats.py --sumstats pgc.cross.BIP11.2013-05.txt --N 11810 --out bip
+	> python munge_sumstats.py --sumstats pgc.cross.SCZ17.2013-05.txt --N 17115 --out scz -merge-alleles w_hm3.snplist
+	> python munge_sumstats.py --sumstats pgc.cross.BIP11.2013-05.txt --N 11810 --out bip -merge-alleles w_hm3.snplist
 
 These commands should take about 20 seconds each, though of course the precise time will vary from machine to machine. This will print a series of log messages to the terminal (described below), along with files, `scz.log`, `scz.sumstats.gz` and `bip.log`, `bip.sumstats.gz`. `munge_sumstats.py` will print warning messages labeled `WARNING` to the log file if it finds anything troubling. You can and should search your log files for warnings with the command `grep 'WARNING' *log`. It turns out there are no warnings for these data. 
 
