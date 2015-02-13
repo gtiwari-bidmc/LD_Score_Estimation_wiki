@@ -20,7 +20,7 @@ If you want to compute the genetic correlation between schizophrenia and bipolar
 	> unzip -o pgc.cross.bip.zip
 	> unzip -o pgc.cross.scz.zip
 	> bunzip2 w_hm3.snplist.bz2
-	> python munge_sumstats.py --sumstats pgc.cross.SCZ17.2013-05.txt --N 17115 --out scz -merge-alleles w_hm3.snplist
+	> python munge_sumstats.py --sumstats pgc.cross.SCZ17.2013-05.txt --N 17115 --out scz --merge-alleles w_hm3.snplist
 	> python munge_sumstats.py --sumstats pgc.cross.BIP11.2013-05.txt --N 11810 --out bip --merge-alleles w_hm3.snplist
 
 	# LD Score Regression
@@ -102,7 +102,7 @@ It is a good idea to check that the alleles listed in your summary statistics fi
 
 To convert the summary statistics, type the commands
 
-	> python munge_sumstats.py --sumstats pgc.cross.SCZ17.2013-05.txt --N 17115 --out scz -merge-alleles w_hm3.snplist
+	> python munge_sumstats.py --sumstats pgc.cross.SCZ17.2013-05.txt --N 17115 --out scz --merge-alleles w_hm3.snplist
 	> python munge_sumstats.py --sumstats pgc.cross.BIP11.2013-05.txt --N 11810 --out bip -merge-alleles w_hm3.snplist
 
 These commands should take about 20 seconds each, though of course the precise time will vary from machine to machine. This will print a series of log messages to the terminal (described below), along with files, `scz.log`, `scz.sumstats.gz` and `bip.log`, `bip.sumstats.gz`. `munge_sumstats.py` will print warning messages labeled `WARNING` to the log file if it finds anything troubling. You can and should search your log files for warnings with the command `grep 'WARNING' *log`. It turns out there are no warnings for these data. 
