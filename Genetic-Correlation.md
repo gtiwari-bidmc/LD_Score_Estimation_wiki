@@ -301,9 +301,18 @@ When estimating heritability, the LD Score regression intercept protects from bi
 then you will probably win on mean square error by constraining the intercept.
 However, you should be careful with constraining the intercept. If you constrain the cross-trait LD Score regression intercept to zero when there is sample overlap, you can get completely misleading results that will frequently be out-of-bounds (e.g., r<sub>g</sub> >> 1).
 
-You can constrain the intercept with the `--constrain-intercept` flag. For h<sup>2</sup> estimation, the synxtax is `--constrain-intercept N`, where N is the desired intercept (usually 1, though sometimes lower if there is GC correction). For r<sub>g</sub>, the syntax is `--constrain-intercept N1,N2,N3`, where N1 is the intercept for the first single-trait LD Score regression, N2 is the intercept for the second single-trait LD Score regression and N3 is the intercept for the cross-trait LD Score regression. If there is sample overlap, the correct value of N3 requires some care to compute; a formula can be found in the supplementary note of the [genetic correlation paper](http://www.biorxiv.org/content/early/2015/01/27/014498). 
+You can constrain the intercept with the `--intercept-h2`  and `--intercept-gencov` flags. For h<sup>2</sup> estimation, the synxtax is `--intercept-h2 N`, where N is the desired intercept (usually 1, though sometimes lower if there is GC correction). For estimating r<sub>g</sub>, you should use both the `--intercept-h2` and `--intercept-gencov` flags to constrain the single-trait and cross-trait LD Score regression intercepts, respectively.
 
-In this case, there is no sample overlap, so we can use the command `--constrain-intercept 1,1,0`, or the shortcut `--no-intercept`, which is just syntactic sugar for `--constrain-intercept 1,1,0`. This yields
+For example, if you're computing --rg A,B,C and you want to constrain the h<sup>2</sup> intercepts to (silly example) 1,0.99,1.01, and the intercept for gencov(A,B) to -0.5 and the intercept for gencov(A,C) to 0.5, then you would use
+
+	--intercept-h2 1,0.99,1.01
+	--intercept-gencov 0,N0.5,0.5
+
+There are two subtleties here. First, `python`'s command-line argument parser gets confused by dashes, so to specify negative numbers, use N instead of a dash. Second, the first argument to` --intercept-gencov` is silently ignored so that the arguments to `--intercept-h2` and `--intercept-gencov` line up (for p traits, there are p heritabilities but only p-1 genetic covariances).
+
+If there is sample overlap, the correct arguments to `--intercept-gencov` require some care to compute; a formula can be found in the supplementary note of the [genetic correlation paper](http://www.biorxiv.org/content/early/2015/01/27/014498). 
+
+In this case, there is no sample overlap, so we can shortcut `--no-intercept`, which sets all single-trait intercepts to 1 and all cross-trait intercepts to 0.
 
 	$ python ldsc.py --rg scz.sumstats.gz,bip.sumstats.gz --ref-ld-chr eur_w_ld_chr/ --w-ld-chr eur_w_ld_chr/ --out scz_bip --no-intercept
 	
