@@ -23,9 +23,9 @@ Check that the file head is:
 
 Next, convert this file to the `.sumstats` format (see the [docs](../docs/file_formats_sumstats.txt)) using `munge_sumstats.py`. We recommend only keeping HapMap3 SNPs; to do this, you can download a list of HapMap3 SNPs [here](http://www.broadinstitute.org/~bulik/w_hm3.snplist.bz2). Unzip this file to get `w_hm3.snplist`, and then run
 
-	> python munge_sumstats.py --sumstats GIANT_BMI_Speliotes2010_publicrelease_HapMapCeuFreq.txt --merge-alleles w_hm3.snplist --out BMI
+	> python munge_sumstats.py --sumstats GIANT_BMI_Speliotes2010_publicrelease_HapMapCeuFreq.txt --merge-alleles w_hm3.snplist --out BMI --a1-inc
 
-This will give you a file called `BMI.sumstats`.
+This will give you a file called `BMI.sumstats.gz`.
 
 
 ##Step 2: Partition heritability 
@@ -33,7 +33,7 @@ This will give you a file called `BMI.sumstats`.
 The following command will allow you to partition heritability: 
 
 	> python ldsc.py 
-		--h2 BMI.sumstats
+		--h2 BMI.sumstats.gz
 		--ref-ld-chr baseline. 
 		--w-ld-chr weights. 
 		--overlap-annot 
@@ -72,14 +72,14 @@ Format for overlapping categories changing soon.
 
 ### `.results` file
 
-This file has the results of the analysis in tab-delimited form. If any category contains all SNPs, then that category will not appear in this file. There is one row for each category and columns summarizing the results: Proportion of SNPs, Proportion of heritability, Enrichment, and standard errors. Enrichment is (Prop. heritability) / (Prop. SNPs). If you use the `--print-coefficients` flag, then there will also be columns for the regression coefficients.
+This file has the results of the analysis in tab-delimited form. If any category contains all SNPs, then that category will not appear in this file. There is one row for each category and columns summarizing the results: Proportion of SNPs, Proportion of heritability, Enrichment, and standard errors. Enrichment is (Prop. heritability) / (Prop. SNPs). If you use the `--print-coefficients` flag, then there will also be columns for the regression coefficients. (See [Finucane, Bulik-Sullivan et al., bioRxiv](http://biorxiv.org/content/early/2015/01/23/014241) for a discussion of the relationship between the coefficients and proportions of heritability.)
 
 ## Cell-type group analysis
 
 To compare cell-type groups, we use the coefficient z-score in an analysis containing the full baseline model. This means that we are controlling for the 53 categories of the full baseline model when comparing cell-type groups. To run the analysis for a single cell-type group, say CNS, run:
 
 	> python ldsc.py 
-		--h2 BMI.sumstats
+		--h2 BMI.sumstats.gz
 		--w-ld-chr weights.
 		--ref-ld-chr CNS.,baseline.
 		--overlap-annot
