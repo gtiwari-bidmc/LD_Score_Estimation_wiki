@@ -40,7 +40,7 @@ The following command will allow you to partition heritability:
 		--frqfile 1000G.mac5eur. 
 		--out BMI_baseline
 		
-Partitioning heritability with 54 overlapping categories takes about 10 minutes, mostly spent reading in all of the annotation matrices. Here is what each of the flags means: 
+Partitioning heritability with 53 overlapping categories takes about 10 minutes, mostly spent reading in all of the annotation matrices. Here is what each of the flags means: 
 
 ### `--h2` 
 This flag tells `ldsc` to compute partitioned heritability. The argument should be a file in the `.sumstats` format, which can be gzipped or not.  This file should not include custom array data like immunochip, and it should be data from a population that is similar to the population in the LD scores. The LD scores downloaded for this tutorial are European LD scores.
@@ -78,14 +78,14 @@ This file has the results of the analysis in tab-delimited form. If any category
 
 To compare cell-type groups, we use the coefficient z-score in an analysis containing the full baseline model. This means that we are controlling for the 53 categories of the full baseline model when comparing cell-type groups. To run the analysis for a single cell-type group, say CNS, run:
 
-python ldsc.py 
---h2 BMI.sumstats
---w-ld-chr weights.
---ref-ld-chr CNS.,baseline.,
---overlap-annot
---frqfile-chr 1000G.mac5eur.
---out BMI_CNS
---print-coefficients
+	> python ldsc.py 
+		--h2 BMI.sumstats
+		--w-ld-chr weights.
+		--ref-ld-chr CNS.,baseline.,
+		--overlap-annot
+		--frqfile-chr 1000G.mac5eur.
+		--out BMI_CNS
+		--print-coefficients
 
 Then the relevant parameter will be the coefficient z-score of the CNS category, which will be the top right entry in BMI_CNS.results. Do this for each of the ten groups, and then rank by the coefficient z-score of the cell-type group.
 
