@@ -81,7 +81,7 @@ To compare cell-type groups, we use the coefficient z-score in an analysis conta
 	> python ldsc.py 
 		--h2 BMI.sumstats
 		--w-ld-chr weights.
-		--ref-ld-chr CNS.,baseline.,
+		--ref-ld-chr CNS.,baseline.
 		--overlap-annot
 		--frqfile-chr 1000G.mac5eur.
 		--out BMI_CNS
