@@ -175,7 +175,7 @@ This will take about a minute, though the precise time will of course vary from 
 ###### `--rg`
 The `--rg` flag tells `ldsc` to compute genetic correlation. The argument to `--rg` should be a comma-separated list of files in the `.sumstats` format. In this case, we have only passed two files to `--rg`, but if we were to pass three or more files, `ldsc.py` would compute the genetic correlation between the first file and the list and all subsequent files (i.e., --rg a,b,c will compute rg(a,b) and rg(a,c) ). 
 ###### `--ref-ld-chr`
-The `--ref-ld` flag tells `ldsc` which LD Score files to use as the independent variable in the LD Score regression. The `--ref-ld-chr` flag is used for LD Score files split across chromosomes. By default, `ldsc` appends the chromosome number to the end. For example, typing `--ref-ld-chr eur_ref_ld_chr/` tells `ldsc` to use the files `eur_w_ld_chr/1.l2.ldscore, ... , eur_w_ld_chr/22.l2.ldscore`. If the chromosome number is in the middle of the filename, you can tell `ldsc` where to insert the chromosome number by using an `@` symbol. For example, `--ref-ld-chr ld/chr@`.  The argument to `--ref-ld` should omit the `.l2.ldscore` or `.l2.ldscore.gz` file suffix.
+The `--ref-ld` flag tells `ldsc` which LD Score files to use as the independent variable in the LD Score regression. The `--ref-ld-chr` flag is used for LD Score files split across chromosomes. By default, `ldsc` appends the chromosome number to the end. For example, typing `--ref-ld-chr eur_w_ld_chr/` tells `ldsc` to use the files `eur_w_ld_chr/1.l2.ldscore, ... , eur_w_ld_chr/22.l2.ldscore`. If the chromosome number is in the middle of the filename, you can tell `ldsc` where to insert the chromosome number by using an `@` symbol. For example, `--ref-ld-chr ld/chr@`.  The argument to `--ref-ld` should omit the `.l2.ldscore` or `.l2.ldscore.gz` file suffix.
 ###### `--w-ld-chr`
 The `--w-ld` flag tells `ldsc` which LD Scores to use for the regression weights. Ideally, the `--w-ld` LD Score for SNP j should be the sum over all SNPs k included in the regression of r^2_jk. However, for this tutorial, we are using the same set of LD Scores for `--w-ld` and `--ref-ld`. In practice, LD Score regression is not very sensitive to the precise choice of LD Scores used for the `--w-ld` flag. For example, if you want to compute genetic correlation between scz and bip with 850,000 regression SNPs and genetic correlation between scz and major depression with (say) 840,000 regression SNPs, almost all of which are overlapping, then you should save time and use the same `--w-ld-chr` LD Scores for both regressions.
 
@@ -206,10 +206,10 @@ The first section is just the masthead and list of command line options:
 	*********************************************************************
 
 	Options:
-	--ref-ld-chr data/
+	--ref-ld-chr eur_w_ld_chr/
 	--out test
 	--rg scz.sumstats.gz,bip.sumstats.gz
-	--w-ld-chr data/
+	--w-ld-chr eur_w_ld_chr/
 
 The next section shows some basic log messages about reading and merging LD Scores and summary statistics. This section isn't that interesting; the only thing to check is whether the number of SNPs drops unexpectedly at any stage. If this happens, it can indicate a data munging error (e.g., mismatched rs numbers). If the number of SNPs is below 200,000, this is usually bad, and `ldsc` will print a warning.
 
