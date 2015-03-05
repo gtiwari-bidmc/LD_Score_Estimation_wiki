@@ -86,8 +86,8 @@ The summary statistics are not in the `.sumstats` format (defined in the [docs](
 The `ldsc` `.sumstats` format requires five pieces of information for each SNP:
 
 1. A unique identifier (e.g., the rs number)
-2. Allele 1
-3. Allele 2
+2. Allele 1 (effect allele)
+3. Allele 2 (non-effect allele)
 4. Sample size (which often varies from SNP to SNP)
 5. A Z-score 
 
@@ -106,6 +106,8 @@ To convert the summary statistics, type the commands
 	> python munge_sumstats.py --sumstats pgc.cross.BIP11.2013-05.txt --N 11810 --out bip -merge-alleles w_hm3.snplist
 
 These commands should take about 20 seconds each, though of course the precise time will vary from machine to machine. This will print a series of log messages to the terminal (described below), along with files, `scz.log`, `scz.sumstats.gz` and `bip.log`, `bip.sumstats.gz`. `munge_sumstats.py` will print warning messages labeled `WARNING` to the log file if it finds anything troubling. You can and should search your log files for warnings with the command `grep 'WARNING' *log`. It turns out there are no warnings for these data. 
+
+Note that `munge_sumstats.py` interprets `A1` as the reference allele and that the `A1` column in the `.sumstats` file format refers to the reference allele.
 
 ## Reading the Log Files
 
