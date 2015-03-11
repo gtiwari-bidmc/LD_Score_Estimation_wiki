@@ -37,7 +37,7 @@ The following command will allow you to partition heritability:
 		--ref-ld-chr baseline. 
 		--w-ld-chr weights. 
 		--overlap-annot 
-		--frqfile 1000G.mac5eur. 
+		--frqfile-chr 1000G.mac5eur. 
 		--out BMI_baseline
 		
 Partitioning heritability with 53 overlapping categories takes about 10 minutes, mostly spent reading in all of the annotation matrices. Here is what each of the flags means: 
