@@ -87,6 +87,4 @@ To compare cell-type groups, we use the coefficient z-score in an analysis conta
 		--out BMI_CNS
 		--print-coefficients
 
-Then the relevant parameter will be the coefficient z-score of the CNS category, which will be the top right entry in BMI_CNS.results. Do this for each of the ten groups, and then rank by the coefficient z-score of the cell-type group.
-
-Note that here, we are using a comma-separated list of file prefixes with `--ref-ld-chr`, and we also include the `--print-coefficients` flag so that we can compare coefficients rather than proportions of heritability.
+Note that here, we are using a comma-separated list of file prefixes with `--ref-ld-chr`, and we also include the `--print-coefficients` flag so that we can compare coefficients as well as proportions of heritability. In [Finucane, Bulik-Sullivan et al., bioRxiv](http://biorxiv.org/content/early/2015/01/23/014241), we rank cell types using the z-score of the coefficient of the cell type. 
