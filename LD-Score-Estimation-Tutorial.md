@@ -132,4 +132,40 @@ The `--w-ld` LD Scores are just used for weighting the regression and generally 
 
 ## Partitioned LD Scores
 
+To compute annotation-specific LD scores, create a `.annot` file. This file consists of CHR, BP, SNP, and CM columns, followed by one column per category, with a 1 if the SNP is in the category and 0 otherwise. The file can have many categories or just a single category. It must have the same SNPs in the same order as the `.bim` file used.
+
+For example, to compute CNS-specific LD scores for chromosome 22, Download `1000G.mac5eur.22.*`, `hm.22.snp`, and `CNS.22.annot.gz` from [this directory](ftp://pricelab:pricelab@ftp.broadinstitute.org/LDSCORE/).
+
+Then run
+
+	> python ldsc.py 
+	--l2 
+	--bfile 1000G.mac5eur.22 
+	--ld-wind-cm 1 
+	--annot CNS.22.annot.gz 
+	--out CNS.22
+	--print-snps hm.22.snp
+
 ## Building on top of the Finucane et al., Baseline Model
+
+To analyze a new annotation, you can add it to the full baseline model, which is used in the [Partitioning Heritability tutorial](https://github.com/bulik/ldsc/wiki/Partitioned-Heritability). First, you must compute LD scores for your new annotation, and they must be for the same set of SNPs that is in the baseline model.
+
+Start by downloading `1000G.mac5eur.*`, `hm.*.snp`, and `CNS.*.annot.gz` from [this directory](ftp://pricelab:pricelab@ftp.broadinstitute.org/LDSCORE/).
+
+Next, modify `CNS.*.annot.gz` to reflect your annotation, instead of the CNS annotation. Do this by changing only the last column of the file, putting a 1 if the SNP is in the annotation and a 0 otherwise. Save these files as `new_annot.*.annot.gz`.
+
+Next, compute the LD scores for chromosome 22 by entering:
+
+	> python ldsc.py 
+	--l2 
+	--bfile 1000G.mac5eur.22 
+	--ld-wind-cm 1 
+	--annot new_annot.22.annot.gz 
+	--out new_annot.22
+	--print-snps hm.22.snp
+
+This should only take a few minutes. 
+
+Repeat for the other chromosomes. Make sure you save your output files to the same directory, with the same file prefix, as your annot files, so that you have `${prefix}.${chr}.annot.gz`, `${prefix}.${chr}.l2.ldscore`, and `${prefix}.${chr}.l2.M_5_50`. 
+
+Now you are ready to partition heritability using your new annotation. Go through the [Partitioned Heritability tutorial](https://github.com/bulik/ldsc/wiki/Partitioned-Heritability), and in the last step, Cell-type-group analysis, replace the `--ref-ld-chr CNS.,baseline.` line with `--ref-ld-chr new_annot.,baseline.`.
