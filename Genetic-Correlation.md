@@ -9,31 +9,40 @@ This tutorial requires downloading about 75 MB of data.
 If you want to compute the genetic correlation between schizophrenia and bipolar disorder, type these commands
 
 	# Download Data
-	> wget www.med.unc.edu/pgc/files/resultfiles/pgc.cross.bip.zip
-	> wget www.med.unc.edu/pgc/files/resultfiles/pgc.cross.scz.zip
-	> wget www.broadinstitute.org/~bulik/eur_ldscores/eur_w_ld_chr.tar.bz2
-	> wget www.broadinstitute.org/~bulik/w_hm3.snplist.bz2
+	wget www.med.unc.edu/pgc/files/resultfiles/pgc.cross.bip.zip
+	wget www.med.unc.edu/pgc/files/resultfiles/pgc.cross.scz.zip
+	wget www.broadinstitute.org/~bulik/eur_ldscores/eur_w_ld_chr.tar.bz2
+	wget www.broadinstitute.org/~bulik/w_hm3.snplist.bz2
 
 
 	# Munge Data
-	> tar -jxvf eur_w_ld_chr.tar.bz2
-	> unzip -o pgc.cross.bip.zip
-	> unzip -o pgc.cross.scz.zip
-	> bunzip2 w_hm3.snplist.bz2
-	> python munge_sumstats.py --sumstats pgc.cross.SCZ17.2013-05.txt --N 17115 --out scz --merge-alleles w_hm3.snplist
-	> python munge_sumstats.py --sumstats pgc.cross.BIP11.2013-05.txt --N 11810 --out bip --merge-alleles w_hm3.snplist
+	tar -jxvf eur_w_ld_chr.tar.bz2
+	unzip -o pgc.cross.bip.zip
+	unzip -o pgc.cross.scz.zip
+	bunzip2 w_hm3.snplist.bz2
+	python munge_sumstats.py --sumstats pgc.cross.SCZ17.2013-05.txt\
+		 --N 17115\
+		 --out scz\
+		 --merge-alleles w_hm3.snplist
+	python munge_sumstats.py --sumstats pgc.cross.BIP11.2013-05.txt\
+		 --N 11810\ 
+		 --out bip\
+		 --merge-alleles w_hm3.snplist
 
 	# LD Score Regression
-	> python ldsc.py --rg scz.sumstats.gz,bip.sumstats.gz --ref-ld-chr eur_w_ld_chr/ --w-ld-chr eur_w_ld_chr/ --out scz_bip
-	> less scz_bip.log
+	python ldsc.py --rg scz.sumstats.gz,bip.sumstats.gz\
+		 --ref-ld-chr eur_w_ld_chr/\ 
+		 --w-ld-chr eur_w_ld_chr/\ 
+		 --out scz_bip
+	less scz_bip.log
 
 
 ##LD Scores
 
 If you just want to estimate genetic correlation in European GWAS, there is probably no need for you to compute your own LD Scores, so you can skip the tutorial on LD Score estimation and download pre-computed LD Scores with the following commands:
 	
-	> wget www.broadinstitute.org/~bulik/eur_ldscores/eur_w_ld_chr.tar.bz2
-	> tar -jxvf eur_w_ld_chr.tar.bz2
+	wget www.broadinstitute.org/~bulik/eur_ldscores/eur_w_ld_chr.tar.bz2
+	tar -jxvf eur_w_ld_chr.tar.bz2
 
 This will create two a new directories in your current working directory named `eur_ref_ld_chr`. If your machine does not have the `wget` utility, you can go to [this URL](http://www.broadinstitute.org/~bulik/eur_ldscores/) and click the LD Score download links.
 
@@ -43,15 +52,15 @@ These LD Scores were computed using 1000 Genomes European data and are appropria
 
 First, download summary statistics for schizophrenia (scz) and bipolar disorder (bip) from the [psychiatric genomics consortium website](http://www.med.unc.edu/pgc/downloads). If your machine has the `wget` utility, you can use the commands
 
-	> wget www.med.unc.edu/pgc/files/resultfiles/pgc.cross.bip.zip
-	> wget www.med.unc.edu/pgc/files/resultfiles/pgc.cross.scz.zip
+	wget www.med.unc.edu/pgc/files/resultfiles/pgc.cross.bip.zip
+	wget www.med.unc.edu/pgc/files/resultfiles/pgc.cross.scz.zip
 
 If your machine does not have `wget`, you can just copy and paste the download urls into your browser. This will yield two files, named `pgc.cross.bip.zip` and `pgc.cross.scz.zip`. Unzip these files either by double-clicking in a GUI, or with the `unzip -o` command from the command line. 
 This will yield files called `pgc.cross.BIP11.2013-05.txt` and `pgc.cross.SCZ17.2013-05.txt`. 
 
 The first few lines of the BIP file should look like this:
 
-	> head pgc.cross.BIP11.2013-05.txt
+	head pgc.cross.BIP11.2013-05.txt
 
 	snpid hg18chr bp a1 a2 or se pval info ngt CEUaf
 	rs3131972	1	742584	A	G	1.092	0.0817	0.2819	0.694	0	0.16055
@@ -66,7 +75,7 @@ The first few lines of the BIP file should look like this:
 	
 The first few lines of the scz file should look like this 
 
-	> head pgc.cross.SCZ17.2013-05.txt
+	head pgc.cross.SCZ17.2013-05.txt
 
 	snpid hg18chr bp a1 a2 or se pval info ngt CEUaf
 	rs3131972	1	742584	A	G	1	0.0966	0.9991	0.702	0	0.16055
@@ -89,7 +98,7 @@ The `ldsc` `.sumstats` format requires five pieces of information for each SNP:
 2. Allele 1 (effect allele)
 3. Allele 2 (non-effect allele)
 4. Sample size (which often varies from SNP to SNP)
-5. A Z-score 
+5. A P-value
 
 Imputation quality is correlated with LD Score, and low imputation quality yields lower test statistics, so imputation quality is a confounder for LD Score regression. To prevent bias from variable imputation quality, we usually remove poorly-imputed SNPs by filtering on INFO > 0.9. The scz and bip summary statistics that we're using for this tutorial have INFO columns, so `munge_sumstats.py` will automatically perform the filtering. If you're using summary statistics that don't come with an INFO column, we recommend filtering to HapMap3 SNPs (using the `--merge` or `--merge-alleles` flags), because these seem to be well-imputed in most studies.
 
@@ -97,13 +106,19 @@ The two sets of summary statistics that we're using for this tutorial don't have
 
 It is a good idea to check that the alleles listed in your summary statistics files match the alleles listed in the data used to estimate LD Scores. Sometimes a small number of alleles won't match; this usually indicates mis-labeled SNPs. This is accomplished using the `--merge-alleles` flag which takes as its argument a file with a list of SNPs and alleles. You can download the required alleles file with the following command (or by manually following the download link if your machine does not have the `wget` utility):
 
-	> wget http://www.broadinstitute.org/~bulik/w_hm3.snplist.bz2
-	> bunzip2 w_hm3.snplist.bz2
+	wget http://www.broadinstitute.org/~bulik/w_hm3.snplist.bz2
+	bunzip2 w_hm3.snplist.bz2
 
 To convert the summary statistics, type the commands
 
-	> python munge_sumstats.py --sumstats pgc.cross.SCZ17.2013-05.txt --N 17115 --out scz --merge-alleles w_hm3.snplist
-	> python munge_sumstats.py --sumstats pgc.cross.BIP11.2013-05.txt --N 11810 --out bip -merge-alleles w_hm3.snplist
+	python munge_sumstats.py --sumstats pgc.cross.SCZ17.2013-05.txt\
+		--N 17115\
+		--out scz\
+		--merge-alleles w_hm3.snplist
+	python munge_sumstats.py --sumstats pgc.cross.BIP11.2013-05.txt\
+	--N 11810\
+	--out bip\
+	--merge-alleles w_hm3.snplist
 
 These commands should take about 20 seconds each, though of course the precise time will vary from machine to machine. This will print a series of log messages to the terminal (described below), along with files, `scz.log`, `scz.sumstats.gz` and `bip.log`, `bip.sumstats.gz`. `munge_sumstats.py` will print warning messages labeled `WARNING` to the log file if it finds anything troubling. You can and should search your log files for warnings with the command `grep 'WARNING' *log`. It turns out there are no warnings for these data. 
 
@@ -171,7 +186,10 @@ The last section shows some basic metadata about the summary statistics. If mean
 
 Now that we have all the files that we need in the correct format, we can run LD Score regression with the following command:
 
-	> python ldsc.py --rg scz.sumstats.gz,bip.sumstats.gz --ref-ld-chr eur_w_ld_chr/ --w-ld-chr eur_w_ld_chr/ --out scz_bip
+	python ldsc.py --rg scz.sumstats.gz,bip.sumstats.gz\
+		--ref-ld-chr eur_w_ld_chr/\
+		--w-ld-chr eur_w_ld_chr/\
+		--out scz_bip
 
 This will take about a minute, though the precise time will of course vary from machine to machine. Let's walk through the components of this command. 
 ###### `--rg`
@@ -279,7 +297,12 @@ There is no notion of observed or liability scale genetic correlation. We can co
 
 For heritability and genetic covariance, it is customary to report heritability on the liability scale, because liability scale heritability is comparable across studies with different prevalences. By default, `ldsc` outputs observed scale heritability. To convert to the liability scale, we need to tell `ldsc` the sample and population prevalence for each trait using the `--samp-prev` and `--pop-prev` flags, respectively. The population prevalence of scz and bip are both around 1%, and the sample prevalence in each of these studies was about 50%, so 
 
-	> python ldsc.py --rg scz.sumstats.gz,bip.sumstats.gz --ref-ld-chr eur_w_ld_chr/ --w-ld-chr eur_w_ld_chr/ --out scz_bip --samp-prev 0.5,0.5 --pop-prev 0.01,0.01
+	python ldsc.py --rg scz.sumstats.gz,bip.sumstats.gz\ 
+	--ref-ld-chr eur_w_ld_chr/\
+	--w-ld-chr eur_w_ld_chr/\
+	--out scz_bip\
+	--samp-prev 0.5,0.5\
+	--pop-prev 0.01,0.01
 
 The output is the same as before, except 'Observed' is replaced with 'Liability', and the numbers are reported on the liability scale. For example, here is the estimate of the liabilty scale SNP-heritability of schizophrenia:
 
@@ -316,8 +339,12 @@ If there is sample overlap, the correct arguments to `--intercept-gencov` requir
 
 In this case, there is no sample overlap, so we can shortcut `--no-intercept`, which sets all single-trait intercepts to 1 and all cross-trait intercepts to 0.
 
-	$ python ldsc.py --rg scz.sumstats.gz,bip.sumstats.gz --ref-ld-chr eur_w_ld_chr/ --w-ld-chr eur_w_ld_chr/ --out scz_bip --no-intercept
-	
+	python ldsc.py --rg scz.sumstats.gz,bip.sumstats.gz\ 
+		--ref-ld-chr eur_w_ld_chr/\
+		--w-ld-chr eur_w_ld_chr/\
+		--out scz_bip\
+		--no-intercept
+
 	Heritability of phenotype 1
 	---------------------------
 	Total Observed scale h2: 0.5948 (0.0299)
