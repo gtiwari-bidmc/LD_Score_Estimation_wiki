@@ -9,9 +9,13 @@ The tutorial is divided into two components. The first component describes how t
 
 You can estimate HapMap3 LD Scores for chromosome 22 using genotype data from the 1000 Genomes Europeans by entering the following commands:
 
-	> wget www.broadinstitute.org/~bulik/1kg_eur.tar.bz2
-	> tar -jxvf 1kg_eur.tar.bz2
-	> python ldsc.py --bfile 22 --l2 --ld-wind-cm 1 --out 22
+	wget www.broadinstitute.org/~bulik/1kg_eur.tar.bz2
+	tar -jxvf 1kg_eur.tar.bz2
+	python ldsc.py\
+		--bfile 22
+		--l2\
+		--ld-wind-cm 1\
+		--out 22
 
 ## Univariate LD Scores 
 
@@ -23,7 +27,7 @@ We recommend estimating LD Scores using a 1 centiMorgan (cM) window. Most `.bim`
 
 For the purpose of this tutorial, you can download a `.bed/.bim/.fam` fileset with the cM column filled in [here](http://www.broadinstitute.org/~bulik/1kg_eur.tar.bz2). This fileset contains genotypes for all HapMap3 SNPs on chromosome 22 for 378 1000 Genomes Europeans. You can uncompress this fileset with the command
 
-	> tar -jxvf 1kg_eur.tar.bz2
+	tar -jxvf 1kg_eur.tar.bz2
 
 This will produce a directory called `1kg_eur` with four files 
 	
@@ -36,7 +40,11 @@ The first three files are the `.bed/.bim/.fam` fileset; the third file contains 
 
 You can estimate LD Scores with the command
 
-	python ldsc.py --bfile --l2 --ld-wind-cm 1 --out 22
+	python ldsc.py\
+		--bfile\
+		--l2\ 
+		--ld-wind-cm 1\ 
+		--out 22
 
 This should take around 10 seconds to run. The `--bfile` flag points to the `plink` format fileset; the syntax is exactly the same as `plink`. The `--l2` flag tells `ldsc` to compute LD Scores. The `--ld-wind-cm` flag tells `lsdc` to use a 1 cM window to estimate LD Scores. The other options are `--ld-wind-kb`, which defines the window size in kilobases, and `--ld-wind-snp`, which defines the window size in terms of a number of SNPs. We recommend using `--ld-wind-cm`, because this allows the window size to vary with the range of LD. It is sensible to use a larger window (as measured in kb) in regions like the MHC where LD spans over tens of megabases than in regions with high recombination rate, where LD doesn't extend beyond ~100kb.
 
@@ -109,7 +117,7 @@ These files tally the number of SNPs in the `.bed/.bim/.fam` fileset. The `.M` f
 
 `ldsc` compresses `.l2.ldscore` files by default using `gzip`. You can view the contents of this file by typing
 
-	> gunzip -c 22.l2.ldscore.gz | head 
+	gunzip -c 22.l2.ldscore.gz | head 
 	
 	CHR SNP	        BP	        L2
 	22	rs9617528	16061016	1.271
@@ -138,13 +146,13 @@ For example, to compute CNS-specific LD scores for chromosome 22, Download `1000
 
 Then run
 
-	> python ldsc.py 
-	--l2 
-	--bfile 1000G.mac5eur.22 
-	--ld-wind-cm 1 
-	--annot CNS.22.annot.gz 
-	--out CNS.22
-	--print-snps hm.22.snp
+	python ldsc.py\
+		--l2\ 
+		--bfile 1000G.mac5eur.22\ 
+		--ld-wind-cm 1\ 
+		--annot CNS.22.annot.gz\ 
+		--out CNS.22\
+		--print-snps hm.22.snp
 
 ## Building on top of the Finucane et al., Baseline Model
 
@@ -156,13 +164,13 @@ Next, modify `CNS.*.annot.gz` to reflect your annotation, instead of the CNS ann
 
 Next, compute the LD scores for chromosome 22 by entering:
 
-	> python ldsc.py 
-	--l2 
-	--bfile 1000G.mac5eur.22 
-	--ld-wind-cm 1 
-	--annot new_annot.22.annot.gz 
-	--out new_annot.22
-	--print-snps hm.22.snp
+	python ldsc.py\ 
+		--l2\ 
+		--bfile 1000G.mac5eur.22\ 
+		--ld-wind-cm 1\ 
+		--annot new_annot.22.annot.gz\ 
+		--out new_annot.22\
+		--print-snps hm.22.snp
 
 This should only take a few minutes. 
 
