@@ -35,9 +35,9 @@ If you just want to estimate genetic correlation in European GWAS, there is prob
 	> wget www.broadinstitute.org/~bulik/eur_ldscores/eur_w_ld_chr.tar.bz2
 	> tar -jxvf eur_w_ld_chr.tar.bz2
 
-This will create two a new directories in your current working directory named `eur_ref_ld_chr`. If your machine does not have the `wget` utility, you can go to (this URL)[http://www.broadinstitute.org/~bulik/eur_ldscores/] and click the LD Score download links.
+This will create two a new directories in your current working directory named `eur_ref_ld_chr`. If your machine does not have the `wget` utility, you can go to [this URL](http://www.broadinstitute.org/~bulik/eur_ldscores/) and click the LD Score download links.
 
-These LD Scores were computed using 1000 Genomes European data and are appropriate for use with European GWAS data, including the two psychiatric datasets used in this tutorial. For GWAS from other populations, you will need to compute population-appropriate LD Scores. For descriptions of the LD Score files you have just downloaded, see either the (LD Score file formats)[https://github.com/bulik/ldsc/wiki/LD-File-Formats] or (LD Score estimation)[https://github.com/bulik/ldsc/wiki/LD-Score-Estimation-Tutorial] pages. In general, you will want to have separate sets of LD Scores for the `--w-ld-chr` and `--ref-ld-chr` flags. For this tutorial, we are using the same set of LD Scores for both in order to reduce the amount of data that it is necessary to download, and because this more closely mimics the analyses in the [PGC Cross-Disorder Nature Genetics paper](http://www.ncbi.nlm.nih.gov/pubmed/23933821) (paywalled, unfortunately), which use `GCTA` with a GRM constructed using only genotpyed SNPs.
+These LD Scores were computed using 1000 Genomes European data and are appropriate for use with European GWAS data, including the two psychiatric datasets used in this tutorial. For GWAS from other populations, you will need to compute population-appropriate LD Scores. For descriptions of the LD Score files you have just downloaded, see either the [LD Score file formats](https://github.com/bulik/ldsc/wiki/LD-File-Formats) or [LD Score estimation](https://github.com/bulik/ldsc/wiki/LD-Score-Estimation-Tutorial) pages. In general, you will want to have separate sets of LD Scores for the `--w-ld-chr` and `--ref-ld-chr` flags. For this tutorial, we are using the same set of LD Scores for both in order to reduce the amount of data that it is necessary to download, and because this more closely mimics the analyses in the [PGC Cross-Disorder Nature Genetics paper](http://www.ncbi.nlm.nih.gov/pubmed/23933821) (paywalled, unfortunately), which use `GCTA` with a GRM constructed using only genotpyed SNPs.
 
 ##Downloading Summary Statistics
 
@@ -81,7 +81,7 @@ The first few lines of the scz file should look like this
 
 ##Reformatting Summary Statistics
 
-The summary statistics are not in the `.sumstats` format (defined in the [docs](../docs/file_formats_sumstats.txt)) that `ldsc` understands. We strongly recommend that you use the script `munge_sumstats.py` included in this github repository in order to convert summary statistics into the `ldsc` format, because this script checks for a lot of annoying gotchas that have gotten us in trouble before. 
+The summary statistics are not in the `.sumstats` format (defined in the [docs](https://github.com/bulik/ldsc/wiki/Summary-Statistics-File-Format) that `ldsc` understands. We strongly recommend that you use the script `munge_sumstats.py` included in this github repository in order to convert summary statistics into the `ldsc` format, because this script checks for a lot of annoying gotchas that have gotten us in trouble before. 
 
 The `ldsc` `.sumstats` format requires five pieces of information for each SNP:
 
