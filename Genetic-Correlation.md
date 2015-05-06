@@ -95,13 +95,16 @@ The first few lines of the scz file should look like this
 
 The summary statistics are not in the `.sumstats` format (defined in the [docs](https://github.com/bulik/ldsc/wiki/Summary-Statistics-File-Format) that `ldsc` understands. We strongly recommend that you use the script `munge_sumstats.py` included in this github repository in order to convert summary statistics into the `ldsc` format, because this script checks for a lot of annoying gotchas that have gotten us in trouble before. 
 
-The `ldsc` `.sumstats` format requires five pieces of information for each SNP:
+The `ldsc` `.sumstats` format requires six pieces of information for each SNP:
 
 1. A unique identifier (e.g., the rs number)
 2. Allele 1 (effect allele)
 3. Allele 2 (non-effect allele)
 4. Sample size (which often varies from SNP to SNP)
 5. A P-value
+6. A signed summary statistic (beta, OR, log odds, Z-score, etc)
+
+(Note that some summary statistic files do not have a signed summary statistic, but are coded so that A1 is always the trait- or risk-increasing allele. This is equivalent to providing a signed summary statistic, and `munge_sumstats.py` will process such files if called with the `--a1-inc1 flag').
 
 Imputation quality is correlated with LD Score, and low imputation quality yields lower test statistics, so imputation quality is a confounder for LD Score regression. To prevent bias from variable imputation quality, we usually remove poorly-imputed SNPs by filtering on INFO > 0.9. The scz and bip summary statistics that we're using for this tutorial have INFO columns, so `munge_sumstats.py` will automatically perform the filtering. If you're using summary statistics that don't come with an INFO column, we recommend filtering to HapMap3 SNPs (using the `--merge` or `--merge-alleles` flags), because these seem to be well-imputed in most studies.
 
