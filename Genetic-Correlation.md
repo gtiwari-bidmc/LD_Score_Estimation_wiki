@@ -238,11 +238,12 @@ The first section is just the masthead and list of command line options:
 	* GNU General Public License v3
 	*********************************************************************
 
-	Options:
-	--ref-ld-chr eur_w_ld_chr/
-	--out test
-	--rg scz.sumstats.gz,bip.sumstats.gz
-	--w-ld-chr eur_w_ld_chr/
+	Call: 
+	./ldsc.py \
+	--ref-ld-chr eur_w_ld_chr/ \
+	--out scz_bip \
+	--rg scz.sumstats.gz,bip.sumstats.gz \
+	--w-ld-chr eur_w_ld_chr/ 
 
 The next section shows some basic log messages about reading and merging LD Scores and summary statistics. This section isn't that interesting; the only thing to check is whether the number of SNPs drops unexpectedly at any stage. If this happens, it can indicate a data munging error (e.g., mismatched rs numbers). If the number of SNPs is below 200,000, this is usually bad, and `ldsc` will print a warning.
 
