@@ -104,7 +104,7 @@ The `ldsc` `.sumstats` format requires six pieces of information for each SNP:
 5. A P-value
 6. A signed summary statistic (beta, OR, log odds, Z-score, etc)
 
-(Note that some summary statistic files do not have a signed summary statistic, but are coded so that A1 is always the trait- or risk-increasing allele. This is equivalent to providing a signed summary statistic, and `munge_sumstats.py` will process such files if called with the `--a1-inc1 flag').
+(Note that some summary statistic files do not have a signed summary statistic, but are coded so that A1 is always the trait- or risk-increasing allele. This is equivalent to providing a signed summary statistic, and `munge_sumstats.py` will process such files if called with the `--a1-inc1` flag).
 
 Imputation quality is correlated with LD Score, and low imputation quality yields lower test statistics, so imputation quality is a confounder for LD Score regression. To prevent bias from variable imputation quality, we usually remove poorly-imputed SNPs by filtering on INFO > 0.9. The scz and bip summary statistics that we're using for this tutorial have INFO columns, so `munge_sumstats.py` will automatically perform the filtering. If you're using summary statistics that don't come with an INFO column, we recommend filtering to HapMap3 SNPs (using the `--merge` or `--merge-alleles` flags), because these seem to be well-imputed in most studies.
 
