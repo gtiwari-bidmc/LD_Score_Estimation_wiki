@@ -33,10 +33,10 @@ If you want to compute the genetic correlation between schizophrenia and bipolar
 	--merge-alleles w_hm3.snplist
 
 	# LD Score Regression
-	ldsc.py\ 
-	--rg scz.sumstats.gz,bip.sumstats.gz\
-	--ref-ld-chr eur_w_ld_chr/\ 
-	--w-ld-chr eur_w_ld_chr/\ 
+	ldsc.py \ 
+	--rg scz.sumstats.gz,bip.sumstats.gz \
+	--ref-ld-chr eur_w_ld_chr/ \ 
+	--w-ld-chr eur_w_ld_chr/ \ 
 	--out scz_bip
 	less scz_bip.log
 
@@ -118,16 +118,16 @@ It is a good idea to check that the alleles listed in your summary statistics fi
 
 To convert the summary statistics, type the commands
 
-	munge_sumstats.py\
-	--sumstats pgc.cross.SCZ17.2013-05.txt\
-	--N 17115\
-	--out scz\
+	munge_sumstats.py \
+	--sumstats pgc.cross.SCZ17.2013-05.txt \
+	--N 17115 \
+	--out scz \
 	--merge-alleles w_hm3.snplist
 	
         munge_sumstats.py\
-	--sumstats pgc.cross.BIP11.2013-05.txt\
-	--N 11810\
-	--out bip\
+	--sumstats pgc.cross.BIP11.2013-05.txt \
+	--N 11810 \
+	--out bip \
 	--merge-alleles w_hm3.snplist
 
 These commands should take about 20 seconds each, though of course the precise time will vary from machine to machine. This will print a series of log messages to the terminal (described below), along with files, `scz.log`, `scz.sumstats.gz` and `bip.log`, `bip.sumstats.gz`. `munge_sumstats.py` will print warning messages labeled `WARNING` to the log file if it finds anything troubling. You can and should search your log files for warnings with the command `grep 'WARNING' *log`. It turns out there are no warnings for these data. 
@@ -196,10 +196,10 @@ The last section shows some basic metadata about the summary statistics. If mean
 
 Now that we have all the files that we need in the correct format, we can run LD Score regression with the following command:
 
-	ldsc.py\
-	--rg scz.sumstats.gz,bip.sumstats.gz\
-	--ref-ld-chr eur_w_ld_chr/\
-	--w-ld-chr eur_w_ld_chr/\
+	ldsc.py \
+	--rg scz.sumstats.gz,bip.sumstats.gz \
+	--ref-ld-chr eur_w_ld_chr/ \
+	--w-ld-chr eur_w_ld_chr/ \
 	--out scz_bip
 
 This will take about a minute, though the precise time will of course vary from machine to machine. Let's walk through the components of this command. 
@@ -256,7 +256,7 @@ The next section shows some basic log messages about reading and merging LD Scor
 	Computing rg for phenotype 2/2
 	Reading summary statistics from bip.sumstats.gz ...
 	Read summary statistics for 829068 SNPs.
-	After merging with summary staistics, 803425 SNPs remain.
+	After merging with summary statistics, 803425 SNPs remain.
 	803425 SNPs with valid alleles.
 
 The next two sections show the heritabilities of each trait from single-trait LD Score regression. These estimates will be biased downwards by GC correction. Note that these heritability estimates are on the observed scale. Lambda GC is median(chi^2)/0.4549. Mean chi^2 is the mean chi-square statistic. Intercept is the LD Score regression intercept. The intercept should be close to 1, unless the data have been GC corrected, in which case it will often be lower. Ratio is (intercept-1)/(mean(chi^2)-1), which measures the proportion of the inflation in the mean chi^2 that the LD Score regression intercept ascribes to causes other than polygenic heritability. The value of ratio should be close to zero, though in practice values of 10-20% are not uncommon, probably due to sample/reference LD Score mismatch or model misspecification (e.g., low LD variants have slightly higher h^2 per SNP)
@@ -308,12 +308,12 @@ There is no notion of observed or liability scale genetic correlation. We can co
 
 For heritability and genetic covariance, it is customary to report heritability on the liability scale, because liability scale heritability is comparable across studies with different prevalences. By default, `ldsc` outputs observed scale heritability. To convert to the liability scale, we need to tell `ldsc` the sample and population prevalence for each trait using the `--samp-prev` and `--pop-prev` flags, respectively. The population prevalence of scz and bip are both around 1%, and the sample prevalence in each of these studies was about 50%, so 
 
-	ldsc.py\
-	--rg scz.sumstats.gz,bip.sumstats.gz\ 
-	--ref-ld-chr eur_w_ld_chr/\
-	--w-ld-chr eur_w_ld_chr/\
-	--out scz_bip\
-	--samp-prev 0.5,0.5\
+	ldsc.py \
+	--rg scz.sumstats.gz,bip.sumstats.gz \ 
+	--ref-ld-chr eur_w_ld_chr/ \
+	--w-ld-chr eur_w_ld_chr/ \
+	--out scz_bip \
+	--samp-prev 0.5,0.5 \
 	--pop-prev 0.01,0.01
 
 The output is the same as before, except 'Observed' is replaced with 'Liability', and the numbers are reported on the liability scale. For example, here is the estimate of the liabilty scale SNP-heritability of schizophrenia:
@@ -351,11 +351,11 @@ If there is sample overlap, the correct arguments to `--intercept-gencov` requir
 
 In this case, there is no sample overlap, so we can shortcut `--no-intercept`, which sets all single-trait intercepts to 1 and all cross-trait intercepts to 0.
 
-	ldsc.py\ 
-	--rg scz.sumstats.gz,bip.sumstats.gz\ 
-	--ref-ld-chr eur_w_ld_chr/\
-	--w-ld-chr eur_w_ld_chr/\
-	--out scz_bip\
+	ldsc.py \ 
+	--rg scz.sumstats.gz,bip.sumstats.gz \ 
+	--ref-ld-chr eur_w_ld_chr/ \
+	--w-ld-chr eur_w_ld_chr/ \
+	--out scz_bip \
 	--no-intercept
 
 	Heritability of phenotype 1
