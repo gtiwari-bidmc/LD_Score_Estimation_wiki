@@ -33,10 +33,10 @@ If you want to compute the genetic correlation between schizophrenia and bipolar
 	--merge-alleles w_hm3.snplist
 
 	# LD Score Regression
-	ldsc.py \ 
+	ldsc.py \
 	--rg scz.sumstats.gz,bip.sumstats.gz \
-	--ref-ld-chr eur_w_ld_chr/ \ 
-	--w-ld-chr eur_w_ld_chr/ \ 
+	--ref-ld-chr eur_w_ld_chr/ \
+	--w-ld-chr eur_w_ld_chr/ \
 	--out scz_bip
 	less scz_bip.log
 
@@ -309,7 +309,7 @@ There is no notion of observed or liability scale genetic correlation. We can co
 For heritability and genetic covariance, it is customary to report heritability on the liability scale, because liability scale heritability is comparable across studies with different prevalences. By default, `ldsc` outputs observed scale heritability. To convert to the liability scale, we need to tell `ldsc` the sample and population prevalence for each trait using the `--samp-prev` and `--pop-prev` flags, respectively. The population prevalence of scz and bip are both around 1%, and the sample prevalence in each of these studies was about 50%, so 
 
 	ldsc.py \
-	--rg scz.sumstats.gz,bip.sumstats.gz \ 
+	--rg scz.sumstats.gz,bip.sumstats.gz \
 	--ref-ld-chr eur_w_ld_chr/ \
 	--w-ld-chr eur_w_ld_chr/ \
 	--out scz_bip \
@@ -351,8 +351,8 @@ If there is sample overlap, the correct arguments to `--intercept-gencov` requir
 
 In this case, there is no sample overlap, so we can shortcut `--no-intercept`, which sets all single-trait intercepts to 1 and all cross-trait intercepts to 0.
 
-	ldsc.py \ 
-	--rg scz.sumstats.gz,bip.sumstats.gz \ 
+	ldsc.py \
+	--rg scz.sumstats.gz,bip.sumstats.gz \
 	--ref-ld-chr eur_w_ld_chr/ \
 	--w-ld-chr eur_w_ld_chr/ \
 	--out scz_bip \
