@@ -26,14 +26,14 @@ If you want to compute the genetic correlation between schizophrenia and bipolar
 	--out scz \
 	--merge-alleles w_hm3.snplist
 	
-        munge_sumstats.py \
+   munge_sumstats.py \
 	--sumstats pgc.cross.BIP11.2013-05.txt \
 	--N 11810 \
 	--out bip \
 	--merge-alleles w_hm3.snplist
 
 	# LD Score Regression
-	ldsc.py \ 
+    ldsc.py \ 
 	--rg scz.sumstats.gz,bip.sumstats.gz \
 	--ref-ld-chr eur_w_ld_chr/ \ 
 	--w-ld-chr eur_w_ld_chr/ \ 
