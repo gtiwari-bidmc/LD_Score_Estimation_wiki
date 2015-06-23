@@ -124,7 +124,7 @@ To convert the summary statistics, type the commands
 	--out scz \
 	--merge-alleles w_hm3.snplist
 	
-	munge_sumstats.py\
+	munge_sumstats.py \
 	--sumstats pgc.cross.BIP11.2013-05.txt \
 	--N 11810 \
 	--out bip \
@@ -150,10 +150,12 @@ The first section is just the `ldsc` masthead:
 
 The next section tells you what command line options you entered. This section is useful for when you're looking at old log files, wondering precisely how some data were processed.
 
-	Options:
-	--out scz
-	--N 17115.0
-	--sumstats data/pgc.cross.SCZ17.2013-05.txt.bz2
+	Call: 
+	./munge_sumstats.py \
+	--out scz \
+	--merge-alleles w_hm3.snplist \
+	--N 17115.0 \
+	--sumstats pgc.cross.SCZ17.2013-05.txt 
 
 The next section describes how `munge_sumstats.py` interprets the column headers. `munge_sumstats.py` can understand most column headers by default, but if your summary statistics have exotic column names, you may need to tell `munge_sumstats.py` what it should do. For example, if the `foobar` column contains INFO scores, you should type `munge_sumstats.py --INFO foobar`. You should always check this section of the log file to make sure that `munge_sumstats.py` understood your column headers correctly. If you are not sure whether `munge_sumstats.py` will understand your column headers, the easiest thing to do is just run `munge_sumstats.py`; if it does not understand the column headers, it will raise an error immediately. 
 
