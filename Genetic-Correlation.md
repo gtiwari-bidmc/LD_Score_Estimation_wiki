@@ -20,19 +20,19 @@ If you want to compute the genetic correlation between schizophrenia and bipolar
 	unzip -o pgc.cross.bip.zip
 	unzip -o pgc.cross.scz.zip
 	bunzip2 w_hm3.snplist.bz2
-	python munge_sumstats.py\
+	munge_sumstats.py\
 		--sumstats pgc.cross.SCZ17.2013-05.txt\
 		--N 17115\
 		--out scz\
 		--merge-alleles w_hm3.snplist
-	python munge_sumstats.py\
+	munge_sumstats.py\
 		--sumstats pgc.cross.BIP11.2013-05.txt\
 		--N 11810\ 
 		--out bip\
 		--merge-alleles w_hm3.snplist
 
 	# LD Score Regression
-	python ldsc.py\ 
+	ldsc.py\ 
 		--rg scz.sumstats.gz,bip.sumstats.gz\
 		--ref-ld-chr eur_w_ld_chr/\ 
 		--w-ld-chr eur_w_ld_chr/\ 
@@ -117,12 +117,12 @@ It is a good idea to check that the alleles listed in your summary statistics fi
 
 To convert the summary statistics, type the commands
 
-	python munge_sumstats.py\
+	munge_sumstats.py\
 		--sumstats pgc.cross.SCZ17.2013-05.txt\
 		--N 17115\
 		--out scz\
 		--merge-alleles w_hm3.snplist
-	python munge_sumstats.py\
+	munge_sumstats.py\
 		--sumstats pgc.cross.BIP11.2013-05.txt\
 		--N 11810\
 		--out bip\
@@ -194,7 +194,7 @@ The last section shows some basic metadata about the summary statistics. If mean
 
 Now that we have all the files that we need in the correct format, we can run LD Score regression with the following command:
 
-	python ldsc.py\
+	ldsc.py\
 		--rg scz.sumstats.gz,bip.sumstats.gz\
 		--ref-ld-chr eur_w_ld_chr/\
 		--w-ld-chr eur_w_ld_chr/\
@@ -306,7 +306,7 @@ There is no notion of observed or liability scale genetic correlation. We can co
 
 For heritability and genetic covariance, it is customary to report heritability on the liability scale, because liability scale heritability is comparable across studies with different prevalences. By default, `ldsc` outputs observed scale heritability. To convert to the liability scale, we need to tell `ldsc` the sample and population prevalence for each trait using the `--samp-prev` and `--pop-prev` flags, respectively. The population prevalence of scz and bip are both around 1%, and the sample prevalence in each of these studies was about 50%, so 
 
-	python ldsc.py\
+	ldsc.py\
 		--rg scz.sumstats.gz,bip.sumstats.gz\ 
 		--ref-ld-chr eur_w_ld_chr/\
 		--w-ld-chr eur_w_ld_chr/\
@@ -349,7 +349,7 @@ If there is sample overlap, the correct arguments to `--intercept-gencov` requir
 
 In this case, there is no sample overlap, so we can shortcut `--no-intercept`, which sets all single-trait intercepts to 1 and all cross-trait intercepts to 0.
 
-	python ldsc.py\ 
+	ldsc.py\ 
 		--rg scz.sumstats.gz,bip.sumstats.gz\ 
 		--ref-ld-chr eur_w_ld_chr/\
 		--w-ld-chr eur_w_ld_chr/\
