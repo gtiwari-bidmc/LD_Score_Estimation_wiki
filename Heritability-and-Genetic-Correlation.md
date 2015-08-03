@@ -1,6 +1,12 @@
 ##Overview
 
-This tutorial will walk you through computing the genetic correlation between schizophrenia and bipolar disorder using `ldsc` and the summary statistics from the 2013 [PGC Cross-Disorder paper in the Lancet](http://www.ncbi.nlm.nih.gov/pubmed/23453885). This tutorial assumes that you have already downloaded and installed `python` and `ldsc`. If you have not already done this, see the instructions in the [README](https://github.com/bulik/ldsc).
+This tutorial will walk you through estimating the following using `ldsc`:
+
+1. the LD Score regression intercept for a schizophrenia GWAS
+2. the SNP-heritability for schizophrenia 
+3. the genetic correlation between schizophrenia and bipolar disorder 
+
+Most of the workflow for each of these tasks is the same, which is why this tutorial covers all three. We will use summary statistics from the 2013 [PGC Cross-Disorder paper in the Lancet](http://www.ncbi.nlm.nih.gov/pubmed/23453885). This tutorial assumes that you have already downloaded and installed `python` and `ldsc`. If you have not already done this, see the instructions in the [README](https://github.com/bulik/ldsc).
 
 This tutorial requires downloading about 75 MB of data.
 
@@ -40,6 +46,14 @@ If you want to compute the genetic correlation between schizophrenia and bipolar
 	--out scz_bip
 	less scz_bip.log
 
+If you just want to compute heritability and the LD Score regression intercept, replace the last two commands with 
+
+	ldsc.py \
+	--h2 scz.sumstats.gz\
+	--ref-ld-chr eur_w_ld_chr/ \
+	--w-ld-chr eur_w_ld_chr/ \
+	--out scz_bip
+	less scz.log
 
 ##LD Scores
 
@@ -194,7 +208,7 @@ The last section shows some basic metadata about the summary statistics. If mean
 	Total time elapsed: 17.38s 
 
 
-## Estimating Genetic Correlation
+## Estimating Heritability, Genetic Correlation and the LD Score Regression Intercept
 
 Now that we have all the files that we need in the correct format, we can run LD Score regression with the following command:
 
@@ -204,7 +218,17 @@ Now that we have all the files that we need in the correct format, we can run LD
 	--w-ld-chr eur_w_ld_chr/ \
 	--out scz_bip
 
-This will take about a minute, though the precise time will of course vary from machine to machine. Let's walk through the components of this command. 
+If you are only interested in estimating heritability, instead type 
+
+	ldsc.py \
+	--h2 scz.sumstats.gz \
+	--ref-ld-chr eur_w_ld_chr/ \
+	--w-ld-chr eur_w_ld_chr/ \
+	--out scz
+
+The output from the `--h2` and `--rg`  commands are very similar, so for the rest of the tutorial, we will show the output of `--rg`. Note that heritability estimates and LD Score regression intercepts obtained with `--h2` will often be slightly different from heritability estimates and intercepts obtained with `--rg`; this is because for example `--rg scz.sumstats.gz,bip.sumstats.gz` uses the intersection of the SNPs in `scz.sumstats.gz` and the SNPs in `bip.sumstats.gz` for LD Score regression, and `--h2 scz.sumstats.gz` uses all of the SNPs in `scz.sumstats.gz`. Usually these two sets of SNPs will be slightly different, which is what yields the small differences in the estimates.
+
+The commands above will take roughly one minute, though the precise time will vary from machine to machine. Let's walk through the components of this command. 
 ###### `--rg`
 The `--rg` flag tells `ldsc` to compute genetic correlation. The argument to `--rg` should be a comma-separated list of files in the `.sumstats` format. In this case, we have only passed two files to `--rg`, but if we were to pass three or more files, `ldsc.py` would compute the genetic correlation between the first file and the list and all subsequent files (i.e., --rg a,b,c will compute rg(a,b) and rg(a,c) ). 
 ###### `--ref-ld-chr`
