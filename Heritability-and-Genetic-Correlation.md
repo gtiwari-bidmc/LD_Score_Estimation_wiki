@@ -333,7 +333,7 @@ The last section (which may not fit too well on your screen) is a table summariz
 
 There is no notion of observed or liability scale genetic correlation. We can compute genetic correlation between pairs of quantitative traits, one quantitative trait and one binary trait, and pairs of binary traits without having to worry about different scales. In addition, if we compute genetic correlations from two studies of the same binary trait with different sample prevalences, we should expect to get the same result, modulo noise.
 
-For heritability and genetic covariance, it is customary to report heritability on the liability scale, because liability scale heritability is comparable across studies with different prevalences. By default, `ldsc` outputs observed scale heritability. To convert to the liability scale, we need to tell `ldsc` the sample and population prevalence for each trait using the `--samp-prev` and `--pop-prev` flags, respectively. The population prevalence of scz and bip are both around 1%, and the sample prevalence in each of these studies was about 50%, so 
+For heritability and genetic covariance, it is customary to report heritability on the liability scale, because liability scale heritability is comparable across studies with different prevalences. By default, the `--h2` and `--rg- flags in `ldsc` output observed scale heritability. To convert to the liability scale, we need to tell `ldsc` the sample and population prevalence for each trait using the `--samp-prev` and `--pop-prev` flags, respectively. The population prevalence of scz and bip are both around 1%, and the sample prevalence in each of these studies was about 50%, so 
 
 	ldsc.py \
 	--rg scz.sumstats.gz,bip.sumstats.gz \
@@ -343,7 +343,7 @@ For heritability and genetic covariance, it is customary to report heritability 
 	--samp-prev 0.5,0.5 \
 	--pop-prev 0.01,0.01
 
-The output is the same as before, except 'Observed' is replaced with 'Liability', and the numbers are reported on the liability scale. For example, here is the estimate of the liabilty scale SNP-heritability of schizophrenia:
+Note that the `--samp-prev` and `--pop-prev` flags also work with the `--h2` flag. Conversion to liability scale affects only the SNP-heritability estimate; it does not affect the LD Score regression intercept. The output is the same as before, except 'Observed' is replaced with 'Liability', and the numbers are reported on the liability scale. For example, here is the estimate of the liabilty scale SNP-heritability of schizophrenia:
 
 	Heritability of phenotype 1
 	---------------------------
@@ -365,7 +365,7 @@ When estimating heritability, the LD Score regression intercept protects from bi
 then you will probably win on mean square error by constraining the intercept.
 However, you should be careful with constraining the intercept. If you constrain the cross-trait LD Score regression intercept to zero when there is sample overlap, you can get completely misleading results that will frequently be out-of-bounds (e.g., r<sub>g</sub> >> 1).
 
-You can constrain the intercept with the `--intercept-h2`  and `--intercept-gencov` flags. For h<sup>2</sup> estimation, the synxtax is `--intercept-h2 N`, where N is the desired intercept (usually 1, though sometimes lower if there is GC correction). For estimating r<sub>g</sub>, you should use both the `--intercept-h2` and `--intercept-gencov` flags to constrain the single-trait and cross-trait LD Score regression intercepts, respectively.
+You can constrain the intercept with the `--intercept-h2`  and `--intercept-gencov` flags. For h<sup>2</sup> estimation, the synxtax is `--h2 file.sumstats.gz --intercept-h2 N`, where N is the desired intercept (usually 1, though sometimes lower if there is GC correction). For estimating r<sub>g</sub>, you should use both the `--intercept-h2` and `--intercept-gencov` flags to constrain the single-trait and cross-trait LD Score regression intercepts, respectively.
 
 For example, if you're computing --rg A,B,C and you want to constrain the h<sup>2</sup> intercepts to (silly example) 1,0.99,1.01, and the intercept for gencov(A,B) to -0.5 and the intercept for gencov(A,C) to 0.5, then you would use
 
