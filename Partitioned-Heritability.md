@@ -1,5 +1,5 @@
 ##Overview 
-In this tutorial, you will partition the heritability of schizophrenia by functional category, using the baseline model. We will assume you have already followed the instructions in the [README](https://github.com/bulik/ldsc) for dowloading and installing `python` and `ldsc`. 
+In this tutorial, you will partition the heritability of BMI by functional category, using the baseline model. We will assume you have already followed the instructions in the [README](https://github.com/bulik/ldsc) for dowloading and installing `python` and `ldsc`. 
 
 ##Step 1: Download the data 
 
