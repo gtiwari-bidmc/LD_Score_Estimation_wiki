@@ -22,6 +22,6 @@ The following data are nice to have:
 1. Sample MAF
 2. Sample INFO
 
-These data are used to filter out rare or poorly-imputed variants. Imputation quality is correlated with LD Score, so imputation quality is a confounder for LD Score regression. It is important to apply a strict INFO filter for LD Score regression. We recommend INFO < 0.9, which is the default for `ldsc`. If imputation quality data are not available, our preferred workaround is to restrict to HapMap3 SNPs with 1000 Genomes European MAF > 1%, because this set of variants tends to have high INFO in most studies.
+These data are used to filter out rare or poorly-imputed variants. Imputation quality is correlated with LD Score, so imputation quality is a confounder for LD Score regression. It is important to apply a strict INFO filter for LD Score regression. We recommend INFO > 0.9, which is the default for `ldsc`. If imputation quality data are not available, our preferred workaround is to restrict to HapMap3 SNPs with 1000 Genomes European MAF > 1%, because this set of variants tends to have high INFO in most studies.
 
 It is not necessary to know the amount of sample overlap, but if you do can quantify sample overlap (e.g., if you can rule out sample overlap), you can obtain a better standard error by constraining the LD Score regression intercepts appropriately (with the `--constrain-intercept` flag).
