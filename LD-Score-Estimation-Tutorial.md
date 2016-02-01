@@ -76,13 +76,13 @@ The first section is simply the masthead and a list of command-line options:
 
 The next section contains log messages describing the process of reading the `.bed/.bim/.fam` fileset. `ldsc` will remove monomorphic SNPs by default. You can change the MAF lower bound with the '--maf` flag.
 
-Beginning analysis at Fri Jan 30 10:58:44 2015
-Read list of 19156 SNPs from 22.bim
-Read list of 379 individuals from 22.fam
-Reading genotypes from 22.bed
-After filtering, 19156 SNPs remain
-Estimating LD Score.
-Writing LD Scores for 19156 SNPs to 22.l2.ldscore.gz
+	Beginning analysis at Fri Jan 30 10:58:44 2015
+	Read list of 19156 SNPs from 22.bim
+	Read list of 379 individuals from 22.fam
+	Reading genotypes from 22.bed
+	After filtering, 19156 SNPs remain
+	Estimating LD Score.
+	Writing LD Scores for 19156 SNPs to 22.l2.ldscore.gz
 
 The last section shows some basic metadata about the LD Scores. This section is useful for basic quality checks. For example, LD Score should generally be positively correlated with MAF. In this example, the correlation between MAF and L2 is 0.275, which seems sensible. Some LD Scores may be < 1, because `ldsc` estimates LD Score using an unbiased estimator of r<sup>2</sup>, but generally only a few LD Scores should be < 1. In this example, the mean LD Score is lower than usual, because we only took sum r<sup>2</sup> over SNPs in HapMap3 to save time. 
 
