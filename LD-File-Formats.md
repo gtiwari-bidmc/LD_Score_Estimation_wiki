@@ -1,6 +1,7 @@
 This page describes the file formats required for estimating and storing LD Scores.
 
 There are three main file formats:
+
 1. `.bed`/`.bim`/`.fam` -- see the [Plink 1.9 documentation](https://www.cog-genomics.org/plink2/)
 2.  `.annot.`
 3.   `'l2.ldscore`, `l2.M_5_50`
