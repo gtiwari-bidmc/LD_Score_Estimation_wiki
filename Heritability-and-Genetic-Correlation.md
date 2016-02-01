@@ -17,8 +17,8 @@ If you want to compute the genetic correlation between schizophrenia and bipolar
 	# Download Data
 	wget www.med.unc.edu/pgc/files/resultfiles/pgc.cross.bip.zip
 	wget www.med.unc.edu/pgc/files/resultfiles/pgc.cross.scz.zip
-	wget www.broadinstitute.org/~bulik/eur_ldscores/eur_w_ld_chr.tar.bz2
-	wget www.broadinstitute.org/~bulik/w_hm3.snplist.bz2
+	wget https://data.broadinstitute.org/alkesgroup/LDSCORE/eur_w_ld_chr.tar.bz2
+	wget https://data.broadinstitute.org/alkesgroup/LDSCORE/w_hm3.snplist.bz2
 
 
 	# Munge Data
@@ -59,10 +59,10 @@ If you just want to compute heritability and the LD Score regression intercept, 
 
 If you just want to estimate genetic correlation in European GWAS, there is probably no need for you to compute your own LD Scores, so you can skip the tutorial on LD Score estimation and download pre-computed LD Scores with the following commands:
 	
-	wget www.broadinstitute.org/~bulik/eur_ldscores/eur_w_ld_chr.tar.bz2
+	wget https://data.broadinstitute.org/alkesgroup/LDSCORE/eur_w_ld_chr.tar.bz2
 	tar -jxvf eur_w_ld_chr.tar.bz2
 
-This will create a new directory in your current working directory named `eur_w_ld_chr/`. If your machine does not have the `wget` utility, you can go to [this URL](http://www.broadinstitute.org/~bulik/eur_ldscores/) and click the LD Score download links.
+This will create a new directory in your current working directory named `eur_w_ld_chr/`. If your machine does not have the `wget` utility, you can go to [this URL](https://data.broadinstitute.org/alkesgroup/LDSCORE/) and click the LD Score download link for the file `eur_w_ld_chr.tar.bz2`.
 
 These LD Scores were computed using 1000 Genomes European data and are appropriate for use with European GWAS data, including the two psychiatric datasets used in this tutorial. For GWAS from other populations, you will need to compute population-appropriate LD Scores. For descriptions of the LD Score files you have just downloaded, see either the [LD Score file formats](https://github.com/bulik/ldsc/wiki/LD-File-Formats) or [LD Score estimation](https://github.com/bulik/ldsc/wiki/LD-Score-Estimation-Tutorial) pages. For partitioned LD Score regression, you will want to  have separate sets of LD Scores for the `--w-ld-chr` and `--ref-ld-chr` flags. We also used different LD Scores for non-partitioned LD Score regression in the `--w-ld-chr` and `--ref-ld-chr` flags in the original LD Score regression paper ("LD Score regression distinguishes confounding from polygenicity in genome-wide association studies.") However, our current recommendation is to use the same LD Scores for both flags for non-partitioned LD Score regression. This is the procedure described in this tutorial.
 
@@ -128,7 +128,7 @@ The two sets of summary statistics that we're using for this tutorial don't have
 
 It is a good idea to check that the alleles listed in your summary statistics files match the alleles listed in the data used to estimate LD Scores. Sometimes a small number of alleles won't match; this usually indicates mis-labeled SNPs. This is accomplished using the `--merge-alleles` flag which takes as its argument a file with a list of SNPs and alleles. You can download the required alleles file with the following command (or by manually following the download link if your machine does not have the `wget` utility):
 
-	wget http://www.broadinstitute.org/~bulik/w_hm3.snplist.bz2
+	wget https://data.broadinstitute.org/alkesgroup/LDSCORE/w_hm3.snplist.bz2
 	bunzip2 w_hm3.snplist.bz2
 
 To convert the summary statistics, type the commands
