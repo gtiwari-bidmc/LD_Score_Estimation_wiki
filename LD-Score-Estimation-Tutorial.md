@@ -1,7 +1,7 @@
 ## Overview
 
 This tutorial describes how to use `ldsc` to estimate LD Scores from [`plink`](https://www.cog-genomics.org/plink2/) format `.bed/.bim/.fam` filesets. 
-If you are interested in estimating genetic correlation or the LD Score regression intercept from European-ancestry GWAS data, you can download suitable pre-computed LD Scores from [this URL](http://www.broadinstitute.org/~bulik/eur_ldscores/); there is no need to compute your own LD Scores.
+If you are interested in estimating genetic correlation or the LD Score regression intercept from European-ancestry GWAS data, you can download suitable pre-computed LD Scores from [this URL](https://data.broadinstitute.org/alkesgroup/LDSCORE/eur_w_ld_chr.tar.bz2); there is no need to compute your own LD Scores.
 
 The tutorial is divided into two components. The first component describes how to estimate non-partitioned LD Scores. The second component describes how to estimate partitioned LD Scores and how to use the full baseline model from [Finucane, Bulik-Sullivan et al., 2015](http://biorxiv.org/content/early/2015/01/23/014241.full-text.pdf). The second component is somewhat more complicated.
 
@@ -9,7 +9,7 @@ The tutorial is divided into two components. The first component describes how t
 
 You can estimate HapMap3 LD Scores for chromosome 22 using genotype data from the 1000 Genomes Europeans by entering the following commands:
 
-	wget www.broadinstitute.org/~bulik/1kg_eur.tar.bz2
+	wget https://data.broadinstitute.org/alkesgroup/LDSCORE/1kg_eur.tar.bz2
 	tar -jxvf 1kg_eur.tar.bz2
 	python ldsc.py\
 		--bfile 22
@@ -25,7 +25,7 @@ In order to estimate LD Scores, you need genotype data in the binary `plink` `.b
 
 We recommend estimating LD Scores using a 1 centiMorgan (cM) window. Most `.bim` files have the cM column zeroed out, because `plink` doesn't actually use cM coordinates for anything. You can use the [`plink --cm-map`](https://www.cog-genomics.org/plink2/input#cm_map) flag along with your favorite genetic map (e.g., [here](https://mathgen.stats.ox.ac.uk/impute/1000GP%20Phase%203%20haplotypes%206%20October%202014.html)) to fill in the cM column of your `.bim` file. 
 
-For the purpose of this tutorial, you can download a `.bed/.bim/.fam` fileset with the cM column filled in [here](http://www.broadinstitute.org/~bulik/1kg_eur.tar.bz2). This fileset contains genotypes for all HapMap3 SNPs on chromosome 22 for 378 1000 Genomes Europeans. You can uncompress this fileset with the command
+For the purpose of this tutorial, you can download a `.bed/.bim/.fam` fileset with the cM column filled in [here](https://data.broadinstitute.org/alkesgroup/LDSCORE/1kg_eur.tar.bz2). This fileset contains genotypes for all HapMap3 SNPs on chromosome 22 for 378 1000 Genomes Europeans. You can uncompress this fileset with the command
 
 	tar -jxvf 1kg_eur.tar.bz2
 
