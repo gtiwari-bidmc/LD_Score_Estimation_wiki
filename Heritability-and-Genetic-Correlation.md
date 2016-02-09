@@ -49,11 +49,11 @@ If you want to compute the genetic correlation between schizophrenia and bipolar
 If you just want to compute heritability and the LD Score regression intercept, replace the last two commands with 
 
 	ldsc.py \
-	--h2 scz.sumstats.gz\
+	--h2 scz.sumstats.gz \
 	--ref-ld-chr eur_w_ld_chr/ \
 	--w-ld-chr eur_w_ld_chr/ \
-	--out scz_bip
-	less scz.log
+	--out scz_h2
+	less scz_h2.log
 
 ##LD Scores
 
@@ -225,7 +225,7 @@ If you are only interested in estimating heritability, instead type
 	--h2 scz.sumstats.gz \
 	--ref-ld-chr eur_w_ld_chr/ \
 	--w-ld-chr eur_w_ld_chr/ \
-	--out scz
+	--out scz_h2
 
 The output from the `--h2` and `--rg`  commands are very similar, so for the rest of the tutorial, we will show the output of `--rg`. Note that heritability estimates and LD Score regression intercepts obtained with `--h2` will often be slightly different from heritability estimates and intercepts obtained with `--rg`; this is because for example `--rg scz.sumstats.gz,bip.sumstats.gz` uses the intersection of the SNPs in `scz.sumstats.gz` and the SNPs in `bip.sumstats.gz` for LD Score regression, and `--h2 scz.sumstats.gz` uses all of the SNPs in `scz.sumstats.gz`. Usually these two sets of SNPs will be slightly different, which is what yields the small differences in the estimates.
 
