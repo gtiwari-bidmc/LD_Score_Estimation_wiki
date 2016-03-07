@@ -1,5 +1,5 @@
 ##Overview 
-In this tutorial, you will partition the heritability of BMI by functional category, using the baseline model. We will assume you have already followed the instructions in the [README](https://github.com/bulik/ldsc) for dowloading and installing `python` and `ldsc`. 
+In this tutorial, you will partition the heritability of BMI by functional category, using the baseline model. We will assume you have already followed the instructions in the [README](https://github.com/bulik/ldsc) for downloading and installing `python` and `ldsc`. 
 
 ##Step 1: Download the data 
 
@@ -21,7 +21,7 @@ Check that the file head is:
 	rs10000023 t g 0.5917 0.939 123756
 	rs10000029 t c 0.975 0.24 103623
 
-Next, convert this file to the `.sumstats` format (see the [docs](../docs/file_formats_sumstats.txt)) using `munge_sumstats.py`. We recommend only keeping HapMap3 SNPs; to do this, you can download a list of HapMap3 SNPs [here](http://www.broadinstitute.org/~bulik/w_hm3.snplist.bz2). Unzip this file to get `w_hm3.snplist`, and then run
+Next, convert this file to the `.sumstats` format (see the [docs](../docs/file_formats_sumstats.txt)) using `munge_sumstats.py`. We recommend only keeping HapMap3 SNPs; to do this, you can download a list of HapMap3 SNPs [here](https://data.broadinstitute.org/alkesgroup/LDSCORE/w_hm3.snplist.bz2). Unzip this file to get `w_hm3.snplist`, and then run
 
 	python munge_sumstats.py --sumstats GIANT_BMI_Speliotes2010_publicrelease_HapMapCeuFreq.txt\
 	--merge-alleles w_hm3.snplist 
