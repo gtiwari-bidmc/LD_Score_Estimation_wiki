@@ -184,29 +184,34 @@ The next section describes how `munge_sumstats.py` interprets the column headers
 
 This section describes the filtering process. By default, `munge_sumstats.py` filters on INFO > 0.9, MAF > 0.01 and 0 < P <= 1. It also removes variants that are not SNPs (e.g., indels), strand ambiguous SNPs, and SNPs with duplicated rs numbers. If there is an N column (sample size), it removes SNPs with low values of N. Finally, `munge_sumstats.py` checks that the median value of the signed summary statistic column (beta, Z, OR, log OR) is close to the null median (e.g., median OR should be close to 1) in order to make sure that this column is not mislabeled (it is surprisingly common for columns labeled OR to contain log odds ratios).
 
-	Reading sumstats from data/pgc.cross.SCZ17.2013-05.txt.bz2 into memory 5000000.0 SNPs at a time.
+
+	Reading list of SNPs for allele merge from w_hm3.snplist
+	Read 1217311 SNPs for allele merge.
+	Reading sumstats from pgc.cross.SCZ17.2013-05.txt into memory 5000000.0 SNPs at a time.
 	Read 1237958 SNPs from --sumstats file.
+	Removed 137131 SNPs not in --merge-alleles.
 	Removed 0 SNPs with missing values.
-	Removed 303707 SNPs with INFO <= 0.9.
+	Removed 256286 SNPs with INFO <= 0.9.
 	Removed 0 SNPs with MAF <= 0.01.
 	Removed 0 SNPs with out-of-bounds p-values.
-	Removed 0 variants that were not SNPs or were strand-ambiguous.
-	856732 SNPs remain.
-	Removed 0 SNPs with duplicated rs numbers (856732 SNPs remain).
+	Removed 2 variants that were not SNPs or were strand-ambiguous.
+	844539 SNPs remain.
+	Removed 0 SNPs with duplicated rs numbers (844539 SNPs remain).
 	Using N = 17115.0
 	Median value of or was 1.0, which seems sensible.
-	Writing summary statistics for 856732 SNPs (856732 with nonmissing beta) to scz.sumstats.gz.
+	Removed 39 SNPs whose alleles did not match --merge-alleles (844500 SNPs remain).
+	Writing summary statistics for 1217311 SNPs (844500 with nonmissing beta) to scz.sumstats.gz.
 
 The last section shows some basic metadata about the summary statistics. If mean chi-square is below 1.02, `munge_sumstats.py` will warn you that the data probably are not suitable for LD Score regression.
 
 	Metadata:
-	Mean chi^2 = 1.243
-	Lambda GC = 1.205
-	Max chi^2 = 32.847
-	23 Genome-wide significant SNPs (some may have been removed by filtering).
+	Mean chi^2 = 1.229
+	Lambda GC = 1.201
+	Max chi^2 = 32.4
+	11 Genome-wide significant SNPs (some may have been removed by filtering).
 
-	Conversion finished at Wed Jan 28 18:17:08 2015
-	Total time elapsed: 17.38s 
+	Conversion finished at Mon Apr  4 13:21:29 2016
+	Total time elapsed: 16.07s 
 
 
 ## Estimating Heritability, Genetic Correlation and the LD Score Regression Intercept
@@ -272,44 +277,45 @@ The first section is just the masthead and list of command line options:
 
 The next section shows some basic log messages about reading and merging LD Scores and summary statistics. This section isn't that interesting; the only thing to check is whether the number of SNPs drops unexpectedly at any stage. If this happens, it can indicate a data munging error (e.g., mismatched rs numbers). If the number of SNPs is below 200,000, this is usually bad, and `ldsc` will print a warning.
 
-	Beginning analysis at Thu Jan 29 19:11:21 2015
+	Beginning analysis at Mon Apr  4 14:24:29 2016
 	Reading summary statistics from scz.sumstats.gz ...
-	Read summary statistics for 856732 SNPs.
+	Read summary statistics for 844500 SNPs.
 	Reading reference panel LD Score from data/[1-22] ...
 	Read reference panel LD Scores for 1293150 SNPs.
+	Removing partitioned LD Scores with zero variance.
 	Reading regression weight LD Score from data/[1-22] ...
 	Read regression weight LD Scores for 1293150 SNPs.
-	After merging with reference panel LD, 840504 SNPs remain.
-	After merging with regression SNP LD, 840504 SNPs remain.
+	After merging with reference panel LD, 840450 SNPs remain.
+	After merging with regression SNP LD, 840450 SNPs remain.
 	Computing rg for phenotype 2/2
 	Reading summary statistics from bip.sumstats.gz ...
-	Read summary statistics for 829068 SNPs.
-	After merging with summary statistics, 803425 SNPs remain.
-	803425 SNPs with valid alleles.
+	Read summary statistics for 1217311 SNPs.
+	After merging with summary statistics, 840450 SNPs remain.
+	803373 SNPs with valid alleles.
 
 The next two sections show the heritabilities of each trait from single-trait LD Score regression. These estimates will be biased downwards by GC correction. Note that these heritability estimates are on the observed scale. Lambda GC is median(chi^2)/0.4549. Mean chi^2 is the mean chi-square statistic. Intercept is the LD Score regression intercept. The intercept should be close to 1, unless the data have been GC corrected, in which case it will often be lower. Ratio is (intercept-1)/(mean(chi^2)-1), which measures the proportion of the inflation in the mean chi^2 that the LD Score regression intercept ascribes to causes other than polygenic heritability. The value of ratio should be close to zero, though in practice values of 10-20% are not uncommon, probably due to sample/reference LD Score mismatch or model misspecification (e.g., low LD variants have slightly higher h^2 per SNP)
 
 	Heritability of phenotype 1
 	---------------------------
-	Total Observed scale h2: 0.5909 (0.0484)
+	Total Observed scale h2: 0.5907 (0.0484)
 	Lambda GC: 1.2038
 	Mean Chi^2: 1.2336
-	Intercept: 1.0013 (0.0112)
-	Ratio: 0.0057 (0.0481)
+	Intercept: 1.0014 (0.0113)
+	Ratio: 0.0059 (0.0482)
 
 	Heritability of phenotype 2/2
 	-----------------------------
-	Total Observed scale h2: 0.5223 (0.0532)
-	Lambda GC: 1.1396
-	Mean Chi^2: 1.1437
-	Intercept: 1.0013 (0.0093)
-	Ratio: 0.0092 (0.065)
+	Total Observed scale h2: 0.5221 (0.0531)
+	Lambda GC: 1.1364
+	Mean Chi^2: 1.1436
+	Intercept: 1.0013 (0.0094)
+	Ratio: 0.0093 (0.0652)
 	
 The next section shows the genetic covariance. Genetic covariance will be biased downwards by GC correction. The intercept is shown on the same scale as the single-trait LD Score regression intercept. Multiply by sqrt(N<sub>1</sub>N<sub>2</sub>) in order to obtain an intercept on the N<sub>s</sub>*gencov scale. The data we are using have no sample overlap, so the intercept is less than one standard error away from zero.
 
 	Genetic Covariance
 	------------------
-	Total Observed scale gencov: 0.3643 (0.0368)
+	Total Observed scale gencov: 0.3644 (0.0368)
 	Mean z1*z2: 0.1226
 	Intercept: 0.0037 (0.0071)
 
@@ -319,16 +325,16 @@ The next section shows the genetic correlation, Z-score and P-value. The genetic
 	Genetic Correlation
 	-------------------
 
-	Genetic Correlation: 0.6558 (0.0604)
-	Z-score: 10.8518
-	P: 1.9549e-27
+	Genetic Correlation: 0.6561 (0.0605)
+	Z-score: 10.8503
+	P: 1.9880e-27
 
 
 The last section (which may not fit too well on your screen) is a table summarizing all results. This feature is a little silly when computing a single genetic correlation, but is a big time-saver when running `--rg` with more than two traits. The columns are p1 = trait 1, p2 = trait 2, rg = genetic correlation, se = standard error of rg, p = p-value for rg; h2_obs, h2_obs_se = observed scale h2 for trait 2 and standard error, h2_int, h2_int_se = single-trait LD Score regression intercept for trait 2 and standard error,  gcov_int, gcov_int_se = cross-trait LD Score regression intercept and standard error.
 
 	Summary of Genetic Correlation Results
 	              p1               p2     rg    se       z          p  h2_obs  h2_obs_se  h2_int  h2_int_se  gcov_int  gcov_int_se
-	 scz.sumstats.gz  bip.sumstats.gz  0.656  0.06  10.852  1.955e-27   0.522      0.053   1.001      0.009     0.004        0.007
+	 scz.sumstats.gz  bip.sumstats.gz  0.656  0.06   10.85  1.988e-27   0.522      0.053   1.001      0.009     0.004        0.007
 
 ## Conversion to Liability Scale
 
@@ -344,15 +350,15 @@ For heritability and genetic covariance, it is customary to report heritability 
 	--samp-prev 0.5,0.5 \
 	--pop-prev 0.01,0.01
 
-Note that the `--samp-prev` and `--pop-prev` flags also work with the `--h2` flag. Conversion to liability scale affects only the SNP-heritability estimate; it does not affect the LD Score regression intercept. The output is the same as before, except 'Observed' is replaced with 'Liability', and the numbers are reported on the liability scale. For example, here is the estimate of the liabilty scale SNP-heritability of schizophrenia:
+Note that the `--samp-prev` and `--pop-prev` flags also work with the `--h2` flag. Conversion to liability scale affects only the SNP-heritability estimate; it does not affect the LD Score regression intercept. The output is the same as before, except 'Observed' is replaced with 'Liability', and the numbers are reported on the liability scale. For example, here is the estimate of the liability scale SNP-heritability of schizophrenia:
 
 	Heritability of phenotype 1
 	---------------------------
-	Total Liability scale h2: 0.3261 (0.0267)
+	Total Liability scale h2: 0.326 (0.0267)
 	Lambda GC: 1.2038
 	Mean Chi^2: 1.2336
-	Intercept: 1.0013 (0.0112)
-	Ratio: 0.0057 (0.0481)
+	Intercept: 1.0014 (0.0113)
+	Ratio: 0.0059 (0.0482)
 
 If you're computing genetic covariance between one binary trait and one quantitative trait, then you can tell `ldsc` that (say) the second trait is a quantitative trait via `--samp-prev 0.5,nan --pop-prev 0.01,nan`.
 
@@ -366,7 +372,7 @@ When estimating heritability, the LD Score regression intercept protects from bi
 then you will probably win on mean square error by constraining the intercept.
 However, you should be careful with constraining the intercept. If you constrain the cross-trait LD Score regression intercept to zero when there is sample overlap, you can get completely misleading results that will frequently be out-of-bounds (e.g., r<sub>g</sub> >> 1).
 
-You can constrain the intercept with the `--intercept-h2`  and `--intercept-gencov` flags. For h<sup>2</sup> estimation, the synxtax is `--h2 file.sumstats.gz --intercept-h2 N`, where N is the desired intercept (usually 1, though sometimes lower if there is GC correction). For estimating r<sub>g</sub>, you should use both the `--intercept-h2` and `--intercept-gencov` flags to constrain the single-trait and cross-trait LD Score regression intercepts, respectively.
+You can constrain the intercept with the `--intercept-h2`  and `--intercept-gencov` flags. For h<sup>2</sup> estimation, the syntax is `--h2 file.sumstats.gz --intercept-h2 N`, where N is the desired intercept (usually 1, though sometimes lower if there is GC correction). For estimating r<sub>g</sub>, you should use both the `--intercept-h2` and `--intercept-gencov` flags to constrain the single-trait and cross-trait LD Score regression intercepts, respectively.
 
 For example, if you're computing --rg A,B,C and you want to constrain the h<sup>2</sup> intercepts to (silly example) 1,0.99,1.01, and the intercept for gencov(A,B) to -0.5 and the intercept for gencov(A,C) to 0.5, then you would use
 
@@ -388,16 +394,16 @@ In this case, there is no sample overlap, so we can shortcut `--no-intercept`, w
 
 	Heritability of phenotype 1
 	---------------------------
-	Total Observed scale h2: 0.5948 (0.0299)
+	Total Observed scale h2: 0.5949 (0.0299)
 	Lambda GC: 1.2038
 	Mean Chi^2: 1.2336
 	Intercept: constrained to 1
 
 	Heritability of phenotype 2/2
 	-----------------------------
-	Total Observed scale h2: 0.5277 (0.036)
-	Lambda GC: 1.1396
-	Mean Chi^2: 1.1437
+	Total Observed scale h2: 0.5276 (0.036)
+	Lambda GC: 1.1364
+	Mean Chi^2: 1.1436
 	Intercept: constrained to 1
 	
 	Genetic Covariance
@@ -408,13 +414,13 @@ In this case, there is no sample overlap, so we can shortcut `--no-intercept`, w
 	
 	Genetic Correlation
 	-------------------
-	Genetic Correlation: 0.6736 (0.0394)
-	Z-score: 17.0988
-	P: 1.5143e-65
+	Genetic Correlation: 0.6737 (0.0394)
+	Z-score: 17.0948
+	P: 1.6226e-65
 
 
 	Summary of Genetic Correlation Results
 	              p1               p2     rg     se       z          p  h2_obs  h2_obs_se  h2_int h2_int_se  gcov_int gcov_int_se
-	 scz.sumstats.gz  bip.sumstats.gz  0.674  0.039  17.099  1.514e-65   0.528      0.036       1        NA         0          NA
+	 scz.sumstats.gz  bip.sumstats.gz  0.674  0.039  17.095  1.623e-65   0.528      0.036       1        NA         0          NA
 	
-The output format is essentially the same. Note that the standard error of the genetic correlation estimate has been reduced by about 35% from 0.0604 to 0.0394. This amount of improvement appears to be typical. 
+The output format is essentially the same. Note that the standard error of the genetic correlation estimate has been reduced by about 35% from 0.0605 to 0.0394. This amount of improvement appears to be typical. 
