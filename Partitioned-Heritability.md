@@ -3,7 +3,7 @@ In this tutorial, you will partition the heritability of BMI by functional categ
 
 ##Step 1: Download the data 
 
-The LD scores used in [Finucane, Bulik-Sullivan et al., bioRxiv](http://biorxiv.org/content/early/2015/01/23/014241) can be downloaded [here](http://data.broadinstitute.org/alkesgroup/LDSCORE/). To do the basic baseline analysis, you will need to download `baseline.*`, `weights.*`, and `1000G.mac5eur.*`. To do a cell-type group comparison (described below) you will have to download all of the files.
+The LD scores used in [Finucane, Bulik-Sullivan et al., bioRxiv](http://biorxiv.org/content/early/2015/01/23/014241) can be downloaded [here](http://data.broadinstitute.org/alkesgroup/LDSCORE/). To do the basic baseline analysis, you will need to download the baseline model LD scores (`baseline.*` in `1000G_Phase1_baseline_ldscores.tgz`), regression weights (`weights.*` in `weights_hm3_no_hla.tgz`), and allele frequencies (`1000G.mac5eur.*` in `1000G_Phase1_frq.tgz`). To do a cell-type group comparison (described below) you will also have to download the cell type files (`1000G_Phase1_cell_type_groups.tgz`). Corresponding files built from 1000 Genomes Phase 3 are also available.
 
 To download the BMI summary statistics, go to http://www.broadinstitute.org/collaboration/giant/index.php/GIANT_consortium_data_files and download `GIANT_BMI_Speliotes2010_publicrelease_HapMapCeuFreq.txt`. (You can use the `download GZIP` link and then unzip the resulting file.)
 
