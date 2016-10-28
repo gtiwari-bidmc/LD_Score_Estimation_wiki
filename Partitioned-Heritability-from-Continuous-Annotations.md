@@ -25,7 +25,7 @@ The file `BMI.baselineLD.results` contains one row for each category and columns
 
 ##Step 2:  Computing heritability per quantile of one continuous annotation
 
-Computing the proportion of heritability explained by each quantile of a continuous annotation provides a more intuitive interpretation of the magnitude of a continuous annotation effects. We released an R script [`quantile_h2.r`](https://data.broadinstitute.org/alkesgroup/LDSCORE/quantile_h2.r) to compute these quantities. To compute the proportion of heritability explained by each quintile of MAF-adjusted predicted allele age in the baseline-LD model run the following command 
+Computing the proportion of heritability explained by each quantile of a continuous annotation provides a more intuitive interpretation of the magnitude of a continuous annotation effects. We released an R script [`quantile_h2.r`](https://github.com/bulik/ldsc) to compute these quantities. To compute the proportion of heritability explained by each quintile of MAF-adjusted predicted allele age in the baseline-LD model run the following command 
 
 	R --vanilla --slave \
 	  --args baselineLD.MAF_Adj_Predicted_Allele_Age.q5.M BMI.baselineLD BMI.baselineLD.Allele_Age.q5.txt \
@@ -83,7 +83,7 @@ Let’s now summarize the different steps to perform if you want to add one cont
 
 and interpret the regression coefficient results of file `BMI.baselineLD_yourannot.results`. Remember that to combine two arguments to the `-–ref-ld-chr` flag, the corresponding files need to have the same SNPs in the same order.
 
-4) To create the file containing the sum of each annotation by quantile of your continuous annotation, we released a perl script [`quantile_M.pl`](https://data.broadinstitute.org/alkesgroup/LDSCORE/quantile_M.pl) to compute these quantities. Run the command
+4) To create the file containing the sum of each annotation by quantile of your continuous annotation, we released a perl script [`quantile_M.pl`](https://github.com/bulik/ldsc) to compute these quantities. Run the command
 
 	perl quantile_M.pl \
 	  --ref-ld-chr baselineLD.,yourannot. \
