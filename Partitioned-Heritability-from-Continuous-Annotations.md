@@ -27,27 +27,25 @@ The file `BMI.baselineLD.results` contains one row for each category and columns
 
 Computing the proportion of heritability explained by each quantile of a continuous annotation provides a more intuitive interpretation of the magnitude of a continuous annotation effects. We released an R script [`quantile_h2.r`](https://github.com/bulik/ldsc) to compute these quantities. To compute the proportion of heritability explained by each quintile of MAF-adjusted predicted allele age in the baseline-LD model run the following command 
 
-	R --vanilla --slave \
-	  --args baselineLD.MAF_Adj_Predicted_Allele_Age.q5.M BMI.baselineLD BMI.baselineLD.Allele_Age.q5.txt \
-	  < quantile_h2.r
+	Rscript quantile_h2.r baselineLD.MAF_Adj_Predicted_Allele_Age.q5.M BMI.baselineLD BMI.baselineLD.Allele_Age.q5.txt
 
 where the 3 arguments of the function need to be 
 
 1) the file containing the sum of each annotation by quantile of continuous annotations (here `baselineLD.AlleleAge.q5.M`; this file is available when downloading LD scores from the baseline-LD model, in addition to quintiles `.q5.txt` and deciles `.q10.txt` files of each LD-related annotations of the baseline-LD model). For example, the 3 first lines of `baselineLD.AlleleAge.q5.M` are  
 
 	> head -3 baselineLD.MAF_Adj_Predicted_Allele_Age.q5.M | column -t
-	N            1192330  1192130  1192234  1192229  1192236
-	base         1192330  1192130  1192234  1192229  1192236
-	Coding_UCSC  20848    18276    15755    16864    13352
+	N            1070940  1070943  1070946  1070941  1070947
+	base         1070940  1070943  1070946  1070941  1070947
+	Coding_UCSC  18830    16652    15737    14964    11810
 
-and indicates the number of SNPs in each quintile (line starting with N), and the sum of the base and Coding_UCSC annotations in each quantile (here for example 20848 coding reference SNPs are in the quintile with the lowest MAF-adjusted predicted allele value, while 13352 coding reference SNPs are in the quintile with the highest MAF-adjusted predicted allele value). 
+and indicates the number of SNPs in each quintile (line starting with N), and the sum of the base and Coding_UCSC annotations in each quantile (here for example 18830 coding reference SNPs are in the quintile with the lowest MAF-adjusted predicted allele value, while 11810 coding reference SNPs are in the quintile with the highest MAF-adjusted predicted allele value). 
 Note that these files are computed only on reference SNPs with MAF >= 5%, as stratified LD score regression only uses common SNPs to compute heritability estimates (see Finucane et al. 2015 Nat Genet for more details).
 
 2) the header of the ldsc outputs (here `BMI.baselineLD`). 
 
 3) the output file name (here `BMI.baselineLD.AlleleAge.q5.txt`).
 
-This output file has one row for each quantile (starting with lowest values) and column summarizing the heritability explained by each quantile, its enrichment and corresponding standard errors.
+This output file has one row for each quantile (starting with lowest values) and column summarizing the heritability explained by each quantile, its enrichment and corresponding standard error and P value.
 
 ##Step 3:  Adding one continuous annotation to the baseline-LD model
 
@@ -86,17 +84,16 @@ and interpret the regression coefficient results of file `BMI.baselineLD_yourann
 4) To create the file containing the sum of each annotation by quantile of your continuous annotation, we released a perl script [`quantile_M.pl`](https://github.com/bulik/ldsc) to compute these quantities. Run the command
 
 	perl quantile_M.pl \
-	  --ref-ld-chr baselineLD.,yourannot. \
+	  --ref-annot-chr baselineLD.,yourannot. \
 	  --frqfile-chr 1000G.EUR.QC. \
 	  --annot-header your_annot_header\
 	  --nb-quantile 5\
 	  --maf 0.05 \
 	  --out AlleleAge.baselineLD_yourannot.q5.M
 
-where `--ref-ld-chr` indicates the annotation files to read, `--frqfile-chr` indicates the frq files to read, `--annot-header`  indicates the header of your annotation in the `yourannot.*.annot.gz` files, `--nb-quantile` indicates the number of quantiles to generate (5 by default), `--maf` indicates the MAF threshold to use to include refernce SNPs (0.05 by default), and `--out` indicates the ouput file.
+where `--ref-annot-chr` indicates the annotation files to read, `--frqfile-chr` indicates the frq files to read, `--annot-header`  indicates the header of your annotation in the `yourannot.*.annot.gz` files, `--nb-quantile` indicates the number of quantiles to generate (5 by default), `--maf` indicates the MAF threshold to use to include reference SNPs (0.05 by default), and `--out` indicates the ouput file. Type `perl quantile_M.pl --help` for more information.
+Note that perl module IO::Uncompress::Gunzip should be installed to run this script.
 
 5) Compute heritability per quantile of one continuous annotation
 
-	R --vanilla --slave \
-	  --args baselineLD_yourannot.AlleleAge.q5.M BMI.baselineLD_yourannot BMI.baselineLD_yourannot.AlleleAge.q5.txt \
-	  < quantile_h2.r
+	Rscript quantile_h2.r baselineLD_yourannot.AlleleAge.q5.M BMI.baselineLD_yourannot BMI.baselineLD_yourannot.AlleleAge.q5.txt
