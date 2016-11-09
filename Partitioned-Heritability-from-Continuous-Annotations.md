@@ -19,15 +19,15 @@ Run `ldsc` on BMI summary statistics using the command
 	  --print-delete-vals \
 	  --out BMI.baselineLD
 
-The `--print-coefficients` flag outputs the estimated regression coefficients (i.e. the effect size of the annotation conditioned to all others) in the last column of the `.result` file. The `--print-delete-vals` flag outputs the 200 Jacknife coefficient estimates used to compute standard errors around the coefficient estimates in a `.part_delete` file (check that you have installed the last version of `ldsc` -after 10/28/2016- to access this output file).
+The `--print-coefficients` flag outputs the estimated regression coefficients (i.e. the effect size of the annotation conditioned to all others) in the last column of the `.result` file. The `--print-delete-vals` flag outputs the 200 Jacknife coefficient estimates used to compute standard errors around the coefficient estimates in a `.part_delete` file (check that you have installed the last version of `ldsc` -after 11/09/2016- to access this output file).
 
 The file `BMI.baselineLD.results` contains one row for each category and columns summarizing the results: Proportion of SNPs, Proportion of heritability, Enrichment, and standard errors. Enrichment is (Prop. heritability) / (Prop. SNPs). These outputs make sense only for binary annotations. Do not try to interpret them for continuous annotations. Using `--print-coefficients` flag outputs the regression coefficients and corresponding standard errors and Z score for each annotation. These coefficients measure the additional contribution of one annotation to the model and are interpretable for both binary and continuous annotations (see Finucane et al. 2015 Nat Genet and Gazal et al. bioRxiv for a discussion of the relationship between these regression coefficients and proportions of heritability).
 
 ##Step 2:  Computing heritability per quantile of one continuous annotation
 
-Computing the proportion of heritability explained by each quantile of a continuous annotation provides a more intuitive interpretation of the magnitude of a continuous annotation effects. We released an R script [`quantile_h2.r`](https://github.com/bulik/ldsc) to compute these quantities. To compute the proportion of heritability explained by each quintile of MAF-adjusted predicted allele age in the baseline-LD model run the following command 
+Computing the proportion of heritability explained by each quantile of a continuous annotation provides a more intuitive interpretation of the magnitude of a continuous annotation effects. We released an R script [`quantile_h2g.r`](https://raw.githubusercontent.com/bulik/ldsc/master/ContinuousAnnotations/quantile_h2g.r) to compute these quantities. To compute the proportion of heritability explained by each quintile of MAF-adjusted predicted allele age in the baseline-LD model run the following command 
 
-	Rscript quantile_h2.r baselineLD.MAF_Adj_Predicted_Allele_Age.q5.M BMI.baselineLD BMI.baselineLD.Allele_Age.q5.txt
+	Rscript quantile_h2g.r baselineLD.MAF_Adj_Predicted_Allele_Age.q5.M BMI.baselineLD BMI.baselineLD.Allele_Age.q5.txt
 
 where the 3 arguments of the function need to be 
 
@@ -81,7 +81,7 @@ Let’s now summarize the different steps to perform if you want to add one cont
 
 and interpret the regression coefficient results of file `BMI.baselineLD_yourannot.results`. Remember that to combine two arguments to the `-–ref-ld-chr` flag, the corresponding files need to have the same SNPs in the same order.
 
-4) To create the file containing the sum of each annotation by quantile of your continuous annotation, we released a perl script [`quantile_M.pl`](https://github.com/bulik/ldsc) to compute these quantities. Run the command
+4) To create the file containing the sum of each annotation by quantile of your continuous annotation, we released a perl script [`quantile_M.pl`](https://raw.githubusercontent.com/bulik/ldsc/master/ContinuousAnnotations/quantile_M.pl) to compute these quantities. Run the command
 
 	perl quantile_M.pl \
 	  --ref-annot-chr baselineLD.,yourannot. \
@@ -96,4 +96,4 @@ Note that perl module IO::Uncompress::Gunzip should be installed to run this scr
 
 5) Compute heritability per quantile of one continuous annotation
 
-	Rscript quantile_h2.r baselineLD_yourannot.AlleleAge.q5.M BMI.baselineLD_yourannot BMI.baselineLD_yourannot.AlleleAge.q5.txt
+	Rscript quantile_h2g.r baselineLD_yourannot.AlleleAge.q5.M BMI.baselineLD_yourannot BMI.baselineLD_yourannot.AlleleAge.q5.txt
