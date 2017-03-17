@@ -1,7 +1,4 @@
-## Instructions to do the analyses from Finucane et al. 2017 bioRxiv. 
-
-Full tutorial coming soon. In the meantime, here is a script:
-
+Full tutorial coming soon. In the meantime, here is a script to do the analyses from Finucane et al. 2017 bioRxiv:
 
     #!/bin/bash
     
