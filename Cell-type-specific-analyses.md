@@ -3,7 +3,7 @@ Full tutorial coming soon. In the meantime, here is a script to do the analyses 
     #!/bin/bash
     
     sumstats=$1 #LDSC formatted sumstats file
-    cts_name=$2 #options: Cahoy, Franke, GTEx, GTEx_brain, ImmGen, Roadmap
+    cts_name=$2 #options: Cahoy, Franke, ImmGen, Roadmap
     out=$3
     
     # Download the baseline model and weights
