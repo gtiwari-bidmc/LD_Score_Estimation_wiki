@@ -1,11 +1,11 @@
-##General
+## General
 
 
 **Q.** Is it cool if I fork `ldsc`?
 
 **A.** Of course!
 
-##LD Score Estimation
+## LD Score Estimation
 
 **Q.** Should I parallelize over chromosomes when estimating LD Score?
 
@@ -46,7 +46,7 @@ long time to finish running.
 **A.** This only applies to partitioned LD Scores. This error message means that some of the columns of the LD Score matrix are linearly dependent or are sufficiently close to linearly dependent (condition number > 100,000) that `ldsc` will run into numerical difficulties when attempting to perform LD Score regression with these LD Scores. There are several reasons why this might occur: if the number of SNPs is smaller than the number of LD Scores, if the annot matrix has linearly dependent columns or if the number of categories is very large. Sometimes the LD Score matrix for one of the smaller chromosomes will be ill-conditioned, but the whole-genome LD Score matrix will be fine. Increasing the sample size can also help. 
 
 
-##Genetic Correlation and Heritability
+## Genetic Correlation and Heritability
 
 
 **Q.** What sample size do I need for LD Score regression?
