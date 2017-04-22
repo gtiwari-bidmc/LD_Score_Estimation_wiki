@@ -1,4 +1,4 @@
-##Overview
+## Overview
 
 This tutorial will walk you through estimating the following using `ldsc`:
 
@@ -55,7 +55,7 @@ If you just want to compute heritability and the LD Score regression intercept, 
 	--out scz_h2
 	less scz_h2.log
 
-##LD Scores
+## LD Scores
 
 If you just want to estimate genetic correlation in European GWAS, there is probably no need for you to compute your own LD Scores, so you can skip the tutorial on LD Score estimation and download pre-computed LD Scores with the following commands:
 	
@@ -67,7 +67,7 @@ This will create a new directory in your current working directory named `eur_w_
 These LD Scores were computed using 1000 Genomes European data and are appropriate for use with European GWAS data, including the two psychiatric datasets used in this tutorial. For GWAS from other populations, you will need to compute population-appropriate LD Scores. For descriptions of the LD Score files you have just downloaded, see either the [LD Score file formats](https://github.com/bulik/ldsc/wiki/LD-File-Formats) or [LD Score estimation](https://github.com/bulik/ldsc/wiki/LD-Score-Estimation-Tutorial) pages. For partitioned LD Score regression, you will want to  have separate sets of LD Scores for the `--w-ld-chr` and `--ref-ld-chr` flags. We also used different LD Scores for non-partitioned LD Score regression in the `--w-ld-chr` and `--ref-ld-chr` flags in the original LD Score regression paper ("LD Score regression distinguishes confounding from polygenicity in genome-wide association studies.") However, our current recommendation is to use the same LD Scores for both flags for non-partitioned LD Score regression. This is the procedure described in this tutorial.
 
 
-##Downloading Summary Statistics
+## Downloading Summary Statistics
 
 First, download summary statistics for schizophrenia (scz) and bipolar disorder (bip) from the [psychiatric genomics consortium website](http://www.med.unc.edu/pgc/downloads). If your machine has the `wget` utility, you can use the commands
 
@@ -107,7 +107,7 @@ The first few lines of the scz file should look like this
 	rs4475691	1	836671	T	C	1.059	0.1181	0.6257	1.02	0	0.146789
 	rs1806509	1	843817	A	C	0.9462	0.1539	0.7193	0.383	0	0.600917
 
-##Reformatting Summary Statistics
+## Reformatting Summary Statistics
 
 The summary statistics are not in the `.sumstats` format (defined in the [docs](https://github.com/bulik/ldsc/wiki/Summary-Statistics-File-Format) that `ldsc` understands. We strongly recommend that you use the script `munge_sumstats.py` included in this github repository in order to convert summary statistics into the `ldsc` format, because this script checks for a lot of annoying gotchas that have gotten us in trouble before. 
 
