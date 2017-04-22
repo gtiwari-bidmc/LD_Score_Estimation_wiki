@@ -1,9 +1,9 @@
-##Overview
+## Overview
 Although ldsc software has been designed for binary annotations, the software allows taking continuous annotations as inputs for both `--l2` and `--h2` options. However, some result outputs of `--h2` option are not meaningful anymore.
 
 In this tutorial, you will partition the heritability of BMI by functional categories, using the baseline-LD model from [Gazal et al. bioRxiv](http://biorxiv.org/content/early/2016/10/19/082024), which contains the baseline model as well as several continuous annotations. You will see how to interpret results for binary and continuous annotations. We will assume that you have already followed the [previous tutorial](https://github.com/bulik/ldsc/wiki/Partitioned-Heritability) on partitioned heritability, that you already generated the file BMI.sumstats.gz, and that you already installed `python` and the last version of `ldsc`.
 
-##Step 1: Running ldsc and interpreting outputs
+## Step 1: Running ldsc and interpreting outputs
 
 The annotations and the LD scores from the baseline-LD model used in Gazal et al. bioRxiv can be downloaded [here](https://data.broadinstitute.org/alkesgroup/LDSCORE/1000G_Phase3_baselineLD_ldscores.tgz). The frequency and weight files (computed on European of Phase 3 of 1000 Genomes) can be downloaded [here](https://data.broadinstitute.org/alkesgroup/LDSCORE/1000G_Phase3_frq.tgz) and [here](https://data.broadinstitute.org/alkesgroup/LDSCORE/1000G_Phase3_weights_hm3_no_MHC.tgz).
 
@@ -23,7 +23,7 @@ The `--print-coefficients` flag outputs the estimated regression coefficients (i
 
 The file `BMI.baselineLD.results` contains one row for each category and columns summarizing the results: Proportion of SNPs, Proportion of heritability, Enrichment, and standard errors. Enrichment is (Prop. heritability) / (Prop. SNPs). These outputs make sense only for binary annotations. Do not try to interpret them for continuous annotations. Using `--print-coefficients` flag outputs the regression coefficients and corresponding standard errors and Z score for each annotation. These coefficients measure the additional contribution of one annotation to the model and are interpretable for both binary and continuous annotations (see Finucane et al. 2015 Nat Genet and Gazal et al. bioRxiv for a discussion of the relationship between these regression coefficients and proportions of heritability).
 
-##Step 2:  Computing heritability per quantile of one continuous annotation
+## Step 2:  Computing heritability per quantile of one continuous annotation
 
 Computing the proportion of heritability explained by each quantile of a continuous annotation provides a more intuitive interpretation of the magnitude of a continuous annotation effects. We released an R script [`quantile_h2g.r`](https://raw.githubusercontent.com/bulik/ldsc/master/ContinuousAnnotations/quantile_h2g.r) to compute these quantities. To compute the proportion of heritability explained by each quintile of MAF-adjusted predicted allele age in the baseline-LD model run the following command 
 
@@ -47,7 +47,7 @@ Note that these files are computed only on reference SNPs with MAF >= 5%, as str
 
 This output file has one row for each quantile (starting with lowest values) and column summarizing the heritability explained by each quantile, its enrichment and corresponding standard error and P value.
 
-##Step 3:  Adding one continuous annotation to the baseline-LD model
+## Step 3:  Adding one continuous annotation to the baseline-LD model
 
 Let’s now summarize the different steps to perform if you want to add one continuous the baseline-LD model.
 
