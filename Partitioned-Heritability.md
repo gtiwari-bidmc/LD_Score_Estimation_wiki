@@ -1,7 +1,7 @@
-##Overview 
+## Overview 
 In this tutorial, you will partition the heritability of BMI by functional category, using the baseline model. We will assume you have already followed the instructions in the [README](https://github.com/bulik/ldsc) for downloading and installing `python` and `ldsc`. 
 
-##Step 1: Download the data 
+## Step 1: Download the data 
 
 The LD scores used in [Finucane, Bulik-Sullivan et al., bioRxiv](http://biorxiv.org/content/early/2015/01/23/014241) can be downloaded [here](http://data.broadinstitute.org/alkesgroup/LDSCORE/). To do the basic baseline analysis, you will need to download the baseline model LD scores (`baseline.*` in `1000G_Phase1_baseline_ldscores.tgz`), regression weights (`weights.*` in `weights_hm3_no_hla.tgz`), and allele frequencies (`1000G.mac5eur.*` in `1000G_Phase1_frq.tgz`). To do a cell-type group comparison (described below) you will also have to download the cell type files (`1000G_Phase1_cell_type_groups.tgz`). Corresponding files built from 1000 Genomes Phase 3 are also available.
 
@@ -31,7 +31,7 @@ Next, convert this file to the `.sumstats` format (see the [docs](../docs/file_f
 This will give you a file called `BMI.sumstats.gz`.
 
 
-##Step 2: Partition heritability 
+## Step 2: Partition heritability 
 
 The following command will allow you to partition heritability: 
 
@@ -48,23 +48,23 @@ Partitioning heritability with 53 overlapping categories takes about 10 minutes,
 ### `--h2` 
 This flag tells `ldsc` to compute partitioned heritability. The argument should be a file in the `.sumstats` format, which can be gzipped or not.  This file should not include custom array data like immunochip, and it should be data from a population that is similar to the population in the LD scores. The LD scores downloaded for this tutorial are European LD scores.
 
-###`--ref-ld-chr` 
+### `--ref-ld-chr` 
 The `--ref-ld` flag tells `ldsc` which LD Score files to use as the independent variable in the LD Score regression. The `--ref-ld-chr` flag is used for LD Score files split across chromosomes. By default, `ldsc` appends the chromosome number to the end. For example, typing `--ref-ld-chr baseline.` tells `ldsc` to use the files `baseline.1.l2.ldscore.gz`, ... , `baseline.22.l2.ldscore.gz` and `baseline.1.l2.M_5_50`, ... , `baseline.22.l2.M_5_50`. If the chromosome number is in the middle of the filename, you can tell `ldsc` where to insert the chromosome number by using an `@` symbol. For example, `--ref-ld-chr ld/chr@`. The argument to `--ref-ld` should omit the file suffixes (`.l2.ldscore.gz`, `.M_5_50`). 
 
 If you are using the `--overlap-annot` flag, then you must have `.annot.gz` files with the same prefix, and these must be the `.annot.gz` files that were used as input to `--l2` when computing the LD scores. In other words, your `.annot.gz` files must have a row for every SNP in your reference panel. On the other hand, your `.l2.ldscore.gz` files may have fewer rows if you used the `--print-snps` flag when they were computed.
 
 You can input here either a single set of file or a comma-separated list of files. Below, there is an example with comma-separated files. When inputting multiple files, be extra careful not to introduce any co-linearity! For example, don't have the same annotation in two files, or a set of annotations in one file that forms a disjoint union of an annotation from the second file. This will cause `ldsc` to throw an error. This won't be a problem if you only use the files downloaded from the LDSCORE folder above.
 
-###`--w-ld-chr`
+### `--w-ld-chr`
 This flag gives the location of the LD scores used for regression weights. It should be a non-partitioned `.l2.ldscore.gz` file that was computed using the regression SNPs. We recommend using HapMap3 SNPs, excluding the HLA region, as default regression SNPs; that is what is in `weights.*`.
 
-###`--out`
+### `--out`
 This flag tells `ldsc` where to print the the output. It will append .log and .results to this prefix. So in this case, you will see `BMI_baseline.log` and `BMI_baseline.results`.
 
 ### `--overlap-annot`
 This flag tells `ldsc` that the categories you used to generate `baseline.*.l2.ldscore.gz` overlap with each other. To interpret the results when there are overlapping categories, `ldsc` needs to read in the `.annot.gz` files. It does this using the same prefix as in `--ref-ld` or `--ref-ld-chr`. 
 
-###`--frqfile-chr`
+### `--frqfile-chr`
 In order to use only SNPs with MAF > 5% (see [discussion of 22.M_5_50](https://github.com/bulik/ldsc/wiki/LD-Score-Estimation-Tutorial#22l2m-22l2m_5_50)), `ldsc` needs to know how many SNPs with MAF > 5% there are in every pairwise intersection of categories. Because the same annotations may be used in different combinations--for example, several different reference panels may be input at the same time--a single `.M_5_50` file doesn't suffix. Thus `--overlap-annot` requires a frequency file, rather than just a `.M_5_50` file. If you use the `--not-M-5-50` flag, then this file is not necessary.
 
 ## Output files
