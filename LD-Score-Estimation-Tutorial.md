@@ -142,7 +142,7 @@ The `--w-ld` LD Scores are just used for weighting the regression and generally 
 
 To compute annotation-specific LD scores, create a `.annot` file. This file consists of CHR, BP, SNP, and CM columns, followed by one column per category, with a 1 if the SNP is in the category and 0 otherwise. The file can have many categories or just a single category. It must have the same SNPs in the same order as the `.bim` file used.
 
-For example, to compute CNS-specific LD scores for chromosome 22, Download `1000G.mac5eur.22.*`, `hm.22.snp`, and `CNS.22.annot.gz` from [this directory](https://data.broadinstitute.org/alkesgroup/LDSCORE/).
+For example, to compute CNS-specific LD scores for chromosome 22, download plink files (`1000G.mac5eur.22.*` in '1000G_Phase3_plinkfiles.tgz'), HapMap3 SNPs (`hm.22.snp` in 'hapmap3_snps.tgz'), and the CNS annotation (`CNS.22.annot.gz` in '1000G_Phase3_cell_type_groups.tgz') from [this directory](https://data.broadinstitute.org/alkesgroup/LDSCORE/).
 
 Then run
 
