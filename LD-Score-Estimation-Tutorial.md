@@ -142,7 +142,7 @@ The `--w-ld` LD Scores are just used for weighting the regression and generally 
 
 To compute annotation-specific LD scores, create a `.annot` file. This file consists of CHR, BP, SNP, and CM columns, followed by one column per category, with a 1 if the SNP is in the category and 0 otherwise. The file can have many categories or just a single category. It must have the same SNPs in the same order as the `.bim` file used.
 
-For example, to compute CNS-specific LD scores for chromosome 22, download plink files (`1000G.mac5eur.22.*` in '1000G_Phase3_plinkfiles.tgz'), HapMap3 SNPs (`hm.22.snp` in 'hapmap3_snps.tgz'), and the CNS annotation (`CNS.22.annot.gz` in '1000G_Phase3_cell_type_groups.tgz') from [this directory](https://data.broadinstitute.org/alkesgroup/LDSCORE/).
+For example, to compute CNS-specific LD scores for chromosome 22, download plink files (`1000G.mac5eur.22.*` in `1000G_Phase3_plinkfiles.tgz`), HapMap3 SNPs (`hm.22.snp` in `hapmap3_snps.tgz`), and the CNS annotation (`CNS.22.annot.gz` in `1000G_Phase3_cell_type_groups.tgz`) from [this directory](https://data.broadinstitute.org/alkesgroup/LDSCORE/).
 
 Then run
 
@@ -158,7 +158,7 @@ Then run
 
 To analyze a new annotation, you can add it to the full baseline model, which is used in the [Partitioning Heritability tutorial](https://github.com/bulik/ldsc/wiki/Partitioned-Heritability). First, you must compute LD scores for your new annotation, and they must be for the same set of SNPs that is in the baseline model.
 
-Start by downloading `1000G.mac5eur.*`, `hm.*.snp`, and `CNS.*.annot.gz` from [this directory](https://data.broadinstitute.org/alkesgroup/LDSCORE/).
+Start by downloading `1000G_Phase3_plinkfiles.tgz` (containing `1000G.mac5eur.*`), `hapmap3_snps.tgz` (containing `hm.*.snp`), and `1000G_Phase3_cell_type_groups.tgz` (containing `CNS.*.annot.gz`) from [this directory](https://data.broadinstitute.org/alkesgroup/LDSCORE/) and unpacking the compressed tar files.
 
 Next, modify `CNS.*.annot.gz` to reflect your annotation, instead of the CNS annotation. Do this by changing only the last column of the file, putting a 1 if the SNP is in the annotation and a 0 otherwise. Save these files as `new_annot.*.annot.gz`.
 
