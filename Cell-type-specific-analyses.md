@@ -20,8 +20,8 @@ wget https://data.broadinstitute.org/alkesgroup/UKBB/body_BMIz.sumstats.gz
 wget https://data.broadinstitute.org/alkesgroup/LDSCORE/w_hm3.snplist.bz2
 bunzip2 w_hm3.snplist.bz
 python munge_sumstats.py \
---sumstats ../body_BMIz.sumstats.gz 
---merge-alleles ../w_hm3.snplist 
+--sumstats ../body_BMIz.sumstats.gz \
+--merge-alleles ../w_hm3.snplist \
 --out UKBB_BMI
 
 #Run the regression
@@ -57,8 +57,8 @@ wget https://data.broadinstitute.org/alkesgroup/UKBB/body_BMIz.sumstats.gz
 wget https://data.broadinstitute.org/alkesgroup/LDSCORE/w_hm3.snplist.bz2
 bunzip2 w_hm3.snplist.bz
 python munge_sumstats.py \
---sumstats ../body_BMIz.sumstats.gz 
---merge-alleles ../w_hm3.snplist 
+--sumstats ../body_BMIz.sumstats.gz \
+--merge-alleles ../w_hm3.snplist \
 --out UKBB_BMI
 ```
 
