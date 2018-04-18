@@ -18,17 +18,17 @@ tar -xvzf weights_hm3_no_hla.tgz
 #Download and format the summary statistics, or use your own.
 wget https://data.broadinstitute.org/alkesgroup/UKBB/body_BMIz.sumstats.gz
 wget https://data.broadinstitute.org/alkesgroup/LDSCORE/w_hm3.snplist.bz2
-bunzip2 w_hm3.snplist.bz
+bunzip2 w_hm3.snplist.bz2
 python munge_sumstats.py \
---sumstats ../body_BMIz.sumstats.gz \
---merge-alleles ../w_hm3.snplist \
+--sumstats body_BMIz.sumstats.gz \
+--merge-alleles w_hm3.snplist \
 --out UKBB_BMI
 
 #Run the regression
 ldsc.py \
     --h2-cts UKBB_BMI.sumstats.gz \
     --ref-ld-chr 1000G_EUR_Phase3_baseline/baseline. \
-    --out BMI_Cahoy_results \
+    --out BMI_${cts_name} \
     --ref-ld-chr-cts $cts_name.ldcts \
     --w-ld-chr weights_hm3_no_hla/weights.
 ```
@@ -55,10 +55,10 @@ Finally, download and format the BMI summary statistics, using `munge_sumstats.p
 ```
 wget https://data.broadinstitute.org/alkesgroup/UKBB/body_BMIz.sumstats.gz
 wget https://data.broadinstitute.org/alkesgroup/LDSCORE/w_hm3.snplist.bz2
-bunzip2 w_hm3.snplist.bz
+bunzip2 w_hm3.snplist.bz2
 python munge_sumstats.py \
---sumstats ../body_BMIz.sumstats.gz \
---merge-alleles ../w_hm3.snplist \
+--sumstats body_BMIz.sumstats.gz \
+--merge-alleles w_hm3.snplist \
 --out UKBB_BMI
 ```
 
@@ -71,7 +71,7 @@ cts_name=Cahoy
 ldsc.py \
     --h2-cts UKBB_BMI.sumstats.gz \
     --ref-ld-chr 1000G_EUR_Phase3_baseline/baseline. \
-    --out BMI_Cahoy_results \
+    --out BMI_${cts_name} \
     --ref-ld-chr-cts $cts_name.ldcts \
     --w-ld-chr weights_hm3_no_hla/weights.
 ```
@@ -98,3 +98,9 @@ For each line in the `.ldcts` input file, there is a line in the `.cell_type_res
  - The last column gives a P-value from a one-sided test that the coefficient is greater than zero. We recommend using this for significance testing, with appropriate correction for multiple testing.
 
 For example, here is the `.cell_type_results.txt` file from the analysis of Cahoy gene sets and BMI summary statistics:
+```
+Name    Coefficient     Coefficient_std_error   Coefficient_P_value
+Neuron  7.93194788527e-09       3.02894244784e-09       0.00441303625204
+Oligodendrocyte 7.32019970874e-10       3.51868270994e-09       0.417599619801
+Astrocyte       -5.76220451287e-09      2.60400594455e-09       0.98654507806
+```
