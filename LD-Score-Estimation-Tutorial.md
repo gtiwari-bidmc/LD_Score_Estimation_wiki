@@ -140,40 +140,60 @@ The `--w-ld` LD Scores are just used for weighting the regression and generally 
 
 ## Partitioned LD Scores
 
-To compute annotation-specific LD scores, create a `.annot` file. This file consists of CHR, BP, SNP, and CM columns, followed by one column per category, with a 1 if the SNP is in the category and 0 otherwise. The file can have many categories or just a single category. It must have the same SNPs in the same order as the `.bim` file used.
+### Step 1: Creating an annot file
 
-For example, to compute CNS-specific LD scores for chromosome 22, download plink files (`1000G.mac5eur.22.*` in `1000G_Phase3_plinkfiles.tgz`), HapMap3 SNPs (`hm.22.snp` in `hapmap3_snps.tgz`), and the CNS annotation (`CNS.22.annot.gz` in `1000G_Phase3_cell_type_groups.tgz`) from [this directory](https://data.broadinstitute.org/alkesgroup/LDSCORE/).
+To compute annotation-specific LD scores, you will need an annot file, with extension `.annot` or `.annot.gz`. An annot file typically consists of CHR, BP, SNP, and CM columns, followed by one column per annotation, with the value of the annotation for each SNP (0/1 for binary categories, arbitrary numbers for continuous annotations). The file can have many categories or just a single category. It must have the same SNPs in the same order as the `.bim` file used for the computation of LD scores. We also now allow for "thin annot" files, which omit the CHR, BP, SNP and CM columns and only have data on the annotation itself. These require you to use the `--thin-annot` flag, as described below.
+
+You can always create an annot file on your own. Make sure you have the same SNPs in the same order as the `.bim` file used for the computation of LD scores! We have simplified the annot file creation in two common cases: first, when an annotation consists of a set of genomic regions described in a UCSC bed file; and second, when an annot file is based on a gene set, as in [Finucane et al. 2018 Nat Genet](https://www.nature.com/articles/s41588-018-0081-4). In these two cases, you can use the script `make_annot.py`. 
+
+Two notes about this script:
+1. It requires you to install the `pybedtools` package. 
+2. It outputs "thin annot" files. These files have only one column, with the annotation, and the software assumes but does not check that this has the same SNPs in the same order as the plink files you will use to compute LD scores. To compute LD scores from these files, you will need to use the flag `--thin-annot`, as below.
+
+To compute annot files from a gene set, you will need the following inputs:
+
+1. `--gene-set-file`, a gene set file with the names of the genes in your gene set, one line per gene name.
+2. `--gene-coord-file`, a gene coordinate file, with columns GENE, CHR, START, and END, where START and END are base pair coordinates of TSS and TES. This file can contain more genes than are in the gene set. We provide ENSG_coord.txt as a default. 
+3. `--windowsize`, the window size you would like to use. The annotation will include all SNPs within this many base pairs of the transcribed region. 
+
+To compute annot files from a bed file, you will need the following inputs
+1. `--bed-file`, the UCSC bed file with the regions that make up your annotation.
+2. `--nomerge` [rare]. Usually, you will not want to use this flag. Only use it if you do not want to merge the bed file; i.e., if you want to make a continuous annot file with values proportional to the number of intervals in the bedfile overlapping the SNP, rather than a binary annotation of SNPs that appear in any region. 
+
+In both cases, you will need the following inputs:
+1. `--bimfile`, the plink bim file of the dataset you will use to compute LD scores. 
+2. `--annot-file`, the name of the annot file to output. If this ends with `.gz` then the resulting file will be gzip-ed. 
+
+To try out this script, download the sample files [in this directory](https://data.broadinstitute.org/alkesgroup/LDSCORE/make_annot_sample_files/). You will also need `1000G.EUR.QC.22.bim` in `1000G_Phase3_plinkfiles.tgz` [in this directory](https://data.broadinstitute.org/alkesgroup/LDSCORE/). Then run
+
+		python make_annot.py \
+			--gene-set-file GTEx_Cortex.GeneSet \
+			--gene-coord-file ENSG_coord.txt \
+			--windowsize 100000 \
+			--bimfile 1000G.EUR.QC.22.bim \
+			--annot-file GTEx_Cortex.annot.gz
+or
+
+		python make_annot.py \
+			--bed-file Brain_DPC_H3K27ac.bed \
+			--bimfile 1000G.EUR.QC.22.bim \
+			--annot-file Brain_DPC_H3K27ac.annot.gz
+
+### Step 2: Computing LD scores with an annot file.
+
+Once you have annot file corresponding to `1000G.EUR.QC.22.bim`---we will use the file `Brain_DPC_H3K27ac.annot.gz` created above---make sure you have `1000G.EUR.QC.22.bed` and `1000G.EUR.QC.22.fam` from [`1000G_Phase3_plinkfiles.tgz`](https://data.broadinstitute.org/alkesgroup/LDSCORE/1000G_Phase3_plinkfiles.tgz), and also download HapMap3 SNPs (`hm.22.snp` in `hapmap3_snps.tgz` [in this directory](https://data.broadinstitute.org/alkesgroup/LDSCORE)).
 
 Then run
 
-	python ldsc.py\
-		--l2\ 
-		--bfile 1000G.mac5eur.22\ 
-		--ld-wind-cm 1\ 
-		--annot CNS.22.annot.gz\ 
-		--out CNS.22\
-		--print-snps hm.22.snp
+		python ldsc.py\
+			--l2\ 
+			--bfile 1000G.EUR.QC.22\ 
+			--ld-wind-cm 1\ 
+			--annot Brain_DPC_H3K27ac.annot.gz\ 
+			--thin-annot
+			--out Brain_DPC_H3K27ac\
+			--print-snps hm.22.snp
 
-## Building on top of the Finucane et al., Baseline Model
+(Note: the --thin-annot flag is only included if the annot file does *not* have the CHR, BP, SNP, and CM columns.) Repeat for the other chromosomes. Make sure you save your output files to the same directory, with the same file prefix, as your annot files, so that you have `${prefix}.${chr}.annot.gz`, `${prefix}.${chr}.l2.ldscore`, and `${prefix}.${chr}.l2.M_5_50`. 
 
-To analyze a new annotation, you can add it to the full baseline model, which is used in the [Partitioning Heritability tutorial](https://github.com/bulik/ldsc/wiki/Partitioned-Heritability). First, you must compute LD scores for your new annotation, and they must be for the same set of SNPs that is in the baseline model.
-
-Start by downloading `1000G_Phase3_plinkfiles.tgz` (containing `1000G.mac5eur.*`), `hapmap3_snps.tgz` (containing `hm.*.snp`), and `1000G_Phase3_cell_type_groups.tgz` (containing `CNS.*.annot.gz`) from [this directory](https://data.broadinstitute.org/alkesgroup/LDSCORE/) and unpacking the compressed tar files.
-
-Next, modify `CNS.*.annot.gz` to reflect your annotation, instead of the CNS annotation. Do this by changing only the last column of the file, putting a 1 if the SNP is in the annotation and a 0 otherwise. Save these files as `new_annot.*.annot.gz`.
-
-Next, compute the LD scores for chromosome 22 by entering:
-
-	python ldsc.py\ 
-		--l2\ 
-		--bfile 1000G.mac5eur.22\ 
-		--ld-wind-cm 1\ 
-		--annot new_annot.22.annot.gz\ 
-		--out new_annot.22\
-		--print-snps hm.22.snp
-
-This should only take a few minutes. 
-
-Repeat for the other chromosomes. Make sure you save your output files to the same directory, with the same file prefix, as your annot files, so that you have `${prefix}.${chr}.annot.gz`, `${prefix}.${chr}.l2.ldscore`, and `${prefix}.${chr}.l2.M_5_50`. 
-
-Now you are ready to partition heritability using your new annotation. Go through the [Partitioned Heritability tutorial](https://github.com/bulik/ldsc/wiki/Partitioned-Heritability), and in the last step, Cell-type-group analysis, replace the `--ref-ld-chr CNS.,baseline.` line with `--ref-ld-chr new_annot.,baseline.`.
+Note that if you plan to use a comma-separated list of prefixes with the `--ref-ld-chr` flag, as in the "Cell-type group analysis" section of the  [Partitioning Heritability tutorial](https://github.com/bulik/ldsc/wiki/Partitioned-Heritability), then the two sets of LD scores must match in the sense of having the same set of SNPs that is in the baseline model. So if you are planning to build on top of the baseline model, be sure to use the files in 1000G_Phase3_plinkfiles.tgz, together with the HapMap3 SNPs, as above.
