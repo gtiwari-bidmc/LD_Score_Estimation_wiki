@@ -142,15 +142,12 @@ The `--w-ld` LD Scores are just used for weighting the regression and generally 
 
 ### Step 1: Creating an annot file
 
-To compute annotation-specific LD scores, you will need an annot file, with extension `.annot` or `.annot.gz`. An annot file typically consists of CHR, BP, SNP, and CM columns, followed by one column per annotation, with the value of the annotation for each SNP (0/1 for binary categories, arbitrary numbers for continuous annotations). The file can have many categories or just a single category. It must have the same SNPs in the same order as the `.bim` file used for the computation of LD scores. We also now allow for "thin annot" files, which omit the CHR, BP, SNP and CM columns and only have data on the annotation itself. These require you to use the `--thin-annot` flag, as described below.
+To compute annotation-specific LD scores, you will need an annot file, with extension `.annot` or `.annot.gz`. An annot file typically consists of CHR, BP, SNP, and CM columns, followed by one column per annotation, with the value of the annotation for each SNP (0/1 for binary categories, arbitrary numbers for continuous annotations). The file can have many categories or just a single category. It must have the same SNPs in the same order as the `.bim` file used for the computation of LD scores. We also now allow for "thin annot" files, which omit the CHR, BP, SNP and CM columns and only have data on the annotation itself. The software assumes but does not check that thin annot files have the same SNPs in the same order as the plink files you used to compute LD scores. These require you to use the `--thin-annot` flag, as described below.
 
-You can always create an annot file on your own. Make sure you have the same SNPs in the same order as the `.bim` file used for the computation of LD scores! We have simplified the annot file creation in two common cases: first, when an annotation consists of a set of genomic regions described in a UCSC bed file; and second, when an annot file is based on a gene set, as in [Finucane et al. 2018 Nat Genet](https://www.nature.com/articles/s41588-018-0081-4). In these two cases, you can use the script `make_annot.py`. 
+You can always create an annot file on your own. Make sure you have the same SNPs in the same order as the `.bim` file used for the computation of LD scores! We have simplified the annot file creation in two common cases: first, when an annotation consists of a set of genomic regions described in a UCSC bed file; and second, when an annot file is based on a gene set, as in [Finucane et al. 2018 Nat Genet](https://www.nature.com/articles/s41588-018-0081-4). In these two cases, you can use the script `make_annot.py`.
+Note: this script outputs "thin annot" files. To compute LD scores from these files, you will need to use the flag `--thin-annot`, as below.
 
-Two notes about this script:
-1. It requires you to install the `pybedtools` package. 
-2. It outputs "thin annot" files. These files have only one column, with the annotation, and the software assumes but does not check that this has the same SNPs in the same order as the plink files you will use to compute LD scores. To compute LD scores from these files, you will need to use the flag `--thin-annot`, as below.
-
-To compute annot files from a gene set, you will need the following inputs:
+To use the `make_annot.py` script to compute annot files from a gene set, you will need the following inputs:
 
 1. `--gene-set-file`, a gene set file with the names of the genes in your gene set, one line per gene name.
 2. `--gene-coord-file`, a gene coordinate file, with columns GENE, CHR, START, and END, where START and END are base pair coordinates of TSS and TES. This file can contain more genes than are in the gene set. We provide ENSG_coord.txt as a default. 
