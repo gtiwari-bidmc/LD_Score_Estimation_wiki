@@ -1,3 +1,5 @@
+!!! Note that bugs on scripts [`quantile_h2g.r`](https://raw.githubusercontent.com/bulik/ldsc/master/ContinuousAnnotations/quantile_h2g.r) and [`quantile_M.pl`](https://raw.githubusercontent.com/bulik/ldsc/master/ContinuousAnnotations/quantile_M.pl) have been fixed on 8/10/18; check that you have the lastest versions!!!
+
 ## Overview
 Although ldsc software has been designed for binary annotations, the software allows taking continuous annotations as inputs for both `--l2` and `--h2` options. However, some result outputs of `--h2` option are not meaningful anymore.
 
