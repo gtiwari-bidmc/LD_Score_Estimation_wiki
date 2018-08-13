@@ -79,6 +79,10 @@ This file has the results of the analysis in tab-delimited form. If any category
 
 ## Cell-type group analysis
 
+Update: a more efficient way to do cell type-specific analyses is now implemented and described in the [Cell type-specific analyses](https://github.com/bulik/ldsc/wiki/Cell-type-specific-analyses) section. We only recommend the approach described here if you are interested not just in prioritizing relevant cell types but also in estimating proportion of heritability.
+
+==
+
 To compare cell-type groups, we use the coefficient z-score in an analysis containing the full baseline model. This means that we are controlling for the 53 categories of the full baseline model when comparing cell-type groups. To run the analysis for a single cell-type group, say CNS, run:
 
 	python ldsc.py 
